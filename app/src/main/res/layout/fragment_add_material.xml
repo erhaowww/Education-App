@@ -1,0 +1,87 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Material Name -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Material Name" />
+
+        <EditText
+            android:id="@+id/material_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+        <!-- Material Description -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Material Description" />
+
+        <EditText
+            android:id="@+id/material_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:minLines="4" />
+
+        <!-- Material Chapters -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total Chapters" />
+
+        <EditText
+            android:id="@+id/material_chapters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+        <!-- Dynamic Chapters fields -->
+        <!-- Here you would programmatically add the upload fields based on the number of chapters -->
+
+        <!-- Material Difficulty Level -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Material Difficulty Level" />
+
+        <Spinner
+            android:id="@+id/spinnerDifficultyLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/difficulty_levels" />
+
+
+        <!-- Material Tags -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Material Tags" />
+
+        <EditText
+            android:id="@+id/material_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+        <!-- Add Material Button -->
+        <Button
+            android:id="@+id/add_material_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="Add Material" />
+
+    </LinearLayout>
+
+</ScrollView>

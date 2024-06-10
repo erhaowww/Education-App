@@ -1,0 +1,419 @@
+Index: app/src/main/res/values/colors.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n    <color name=\"purple_200\">#FFBB86FC</color>\n    <color name=\"purple_500\">#FF6200EE</color>\n    <color name=\"purple_700\">#FFFFFF</color>\n    <color name=\"teal_200\">#FF03DAC5</color>\n    <color name=\"teal_700\">#FF018786</color>\n    <color name=\"black\">#FF000000</color>\n    <color name=\"white\">#FFFFFF</color>\n\n    <color name=\"g_hint\">#666666</color>\n    <color name=\"g_black\">#171717</color>\n    <color name=\"g_blue\">#000DAE</color>\n    <color name=\"g_white\">#F5F8FA</color>\n    <color name=\"g_dark_blue\">#000759</color>\n    <color name=\"g_icon_tint\">#97AABD</color>\n    <color name=\"g_pink\">#FF9999</color>\n    <color name=\"g_card_background\">#FAFDFF</color>\n    <color name=\"g_search_and_icons\">#FAFBFC</color>\n    <color name=\"g_line\">#E9EAEC</color>\n    <color name=\"g_circle_shadow\">#B8D9FA</color>\n    <color name=\"g_red\">#FF0000</color>\n    <color name=\"g_text_hint\">#969899</color>\n    <color name=\"g_orange\">#F8BA00</color>\n\n\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/colors.xml b/app/src/main/res/values/colors.xml
+--- a/app/src/main/res/values/colors.xml	(revision fd33a4a984763e3c0d26c525739acfadeceac2ef)
++++ b/app/src/main/res/values/colors.xml	(date 1691052378916)
+@@ -23,5 +23,6 @@
+     <color name="g_text_hint">#969899</color>
+     <color name="g_orange">#F8BA00</color>
+ 
+-
++    <color name="primary_color">#565cce</color>
++    <color name="second_color">#8d92fa</color>
+ </resources>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><project version=\"4\">\n  <component name=\"DesignSurface\">\n    <option name=\"filePathToZoomLevelMap\">\n      <map>\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable-v24/ic_launcher_foreground.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/box_background.xml\" value=\"0.2703125\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/btn_background.xml\" value=\"0.2703125\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/btn_white_background.xml\" value=\"0.22179487179487178\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ellips1_backround.xml\" value=\"0.536\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/empty_box_background.xml\" value=\"0.2\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/favorite_background.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_baseline_error_24.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_cart.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_close.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_ellipse1.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_favorite.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_google_login.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_home.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_kleine_shape.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_launcher_background.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_microphone.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_minus.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_picked.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_profile.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_scan.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_search.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_slide_bar.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_texture_left.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_texture_right.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/line.xml\" value=\"0.2703125\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/order_error_box.xml\" value=\"0.2595\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/search_box_background.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/total_box_background.xml\" value=\"0.2435\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/drawable/viewpager_background.xml\" value=\"0.233\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/font/dw.xml\" value=\"0.284375\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/activity_main.xml\" value=\"0.23615160349854228\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/activity_shopping.xml\" value=\"0.264\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/best_deal_item.xml\" value=\"0.2\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/cart_item.xml\" value=\"0.4\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/chair_extra_ads.xml\" value=\"0.536\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/chair_extra_ads_item.xml\" value=\"0.264\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/color_and_sizes.xml\" value=\"0.4\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/delete_alert_dialog.xml\" value=\"0.264\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_accessory.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_all_orders.xml\" value=\"0.20863616930312098\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_billing.xml\" value=\"0.20863616930312098\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_cart.xml\" value=\"0.264\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_chair.xml\" value=\"0.264\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_cupboard.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_edit_user_information.xml\" value=\"0.20863616930312098\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_enlightening.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_first_screen.xml\" value=\"0.264\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_furniture.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_home.xml\" value=\"0.264\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_language.xml\" value=\"0.20863616930312098\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_login.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_order_completion.xml\" value=\"0.2\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_order_details.xml\" value=\"0.2\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_product_preview.xml\" value=\"0.264\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_profile.xml\" value=\"0.2\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_register.xml\" value=\"0.264\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_search.xml\" value=\"0.264\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_second_screen.xml\" value=\"0.2\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_table.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_view_pager.xml\" value=\"0.20854700854700856\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/product_item.xml\" value=\"0.264\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/recycler_view_all_orders_item.xml\" value=\"0.20863616930312098\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/recycler_view_category_item.xml\" value=\"0.264\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/recycler_view_search_item.xml\" value=\"0.264\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/recyclerview_search_item.xml\" value=\"0.176\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/recyclerview_shipping_item.xml\" value=\"0.1628901239846088\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/layout/viewpager_image_item.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/menu/bottom_menu.xml\" value=\"0.25416666666666665\" />\n        <entry key=\"..\\:/Users/mo/AndroidStudioProjects/kleine/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml\" value=\"0.2315\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/drawable-v24/store_today_sales_background.xml\" value=\"0.2975\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/drawable-v24/today_sales_background.xml\" value=\"0.2975\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_all_orders.xml\" value=\"0.2975\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/drawable/ic_menu.xml\" value=\"0.2975\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/drawable/store_card_background.xml\" value=\"0.2975\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/drawable/store_drawable.xml\" value=\"0.2975\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/drawable/store_pending_orders.xml\" value=\"0.2975\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/drawable/store_total_sales_background.xml\" value=\"0.2975\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/drawable/total_sales_background.xml\" value=\"0.2975\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/activity_shopping.xml\" value=\"0.29717180244829045\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/activity_sotre.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/activity_store.xml\" value=\"0.25\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/best_deal_item.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/cart_item.xml\" value=\"0.2116289012398461\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/chair_extra_ads_item.xml\" value=\"0.1410859341598974\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragemnt_splash_screen.xml\" value=\"0.14\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_accessory.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_address.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_all_orders.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_billing.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_blank.xml\" value=\"0.2894399315946986\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_blank2.xml\" value=\"0.1\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_cart.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_chair.xml\" value=\"0.25\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_container.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_cupboard.xml\" value=\"0.3344418052256532\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_edit_user_information.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_first_screen.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_furniture.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_help.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_home.xml\" value=\"0.29717180244829045\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_home_products.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_language.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_login.xml\" value=\"0.36666666666666664\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_order_details.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_product_preview.xml\" value=\"0.33\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_profile.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_register.xml\" value=\"0.36666666666666664\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_search.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_store_home.xml\" value=\"0.33\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_store_orders.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_store_products.xml\" value=\"0.2894399315946986\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_table.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/fragment_view_pager.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/navigation_drawer_header.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/product_item.xml\" value=\"0.5\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/recycler_view_all_orders_item.xml\" value=\"0.33\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/recyclerview_shipping_item.xml\" value=\"0.2116289012398461\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/layout/viewpager_image_item.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/menu/bottom_menu.xml\" value=\"0.3009833262077811\" />\n        <entry key=\"..\\:/Users/moham/AndroidStudioProjects/kleine/app/src/main/res/menu/navigation_drawer_menu.xml\" value=\"0.3009833262077811\" />\n      </map>\n    </option>\n  </component>\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_17\" default=\"true\" project-jdk-name=\"jbr-17\" project-jdk-type=\"JavaSDK\">\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\n  </component>\n  <component name=\"ProjectType\">\n    <option name=\"id\" value=\"Android\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision fd33a4a984763e3c0d26c525739acfadeceac2ef)
++++ b/.idea/misc.xml	(date 1691057460339)
+@@ -126,7 +126,7 @@
+       </map>
+     </option>
+   </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
+Index: app/src/main/res/values/my_styles.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n\n    <style name=\"BigTextViewThin\">\n        <item name=\"android:textColor\">#4b4f60</item>\n        <item name=\"android:textSize\">@dimen/_20ssp</item>\n        <item name=\"fontFamily\">@font/poppins_thin</item>\n        <item name=\"android:textStyle\">bold</item>\n    </style>\n\n    <style name=\"MediumTextViewThin\">\n        <item name=\"android:textColor\">#4b4f60</item>\n        <item name=\"android:textSize\">@dimen/_15ssp</item>\n        <item name=\"fontFamily\">@font/sf_pro_display</item>\n        <item name=\"android:textStyle\">bold</item>\n    </style>\n\n    <style name=\"SmallTextViewThin\">\n        <item name=\"android:textColor\">@color/g_hint</item>\n        <item name=\"android:textSize\">@dimen/_10ssp</item>\n        <item name=\"fontFamily\">@font/sf_pro_display</item>\n    </style>\n\n\n    <style name=\"EditTextSettings\">\n        <item name=\"android:width\">0dp</item>\n        <item name=\"height\">@dimen/_45sdp</item>\n        <item name=\"fontFamily\">@font/sf_pro_display</item>\n        <item name=\"background\">@drawable/btn_white_background</item>\n        <item name=\"android:gravity\">start</item>\n        <item name=\"android:textStyle\">bold</item>\n        <item name=\"singleLine\">true</item>\n        <item name=\"paddingStart\">@dimen/_10sdp</item>\n    </style>\n\n    <style name=\"DialogStyle\" parent=\"Theme.Design.Light.BottomSheetDialog\">\n    <item name=\"android:windowIsFloating\">false</item>\n    <item name=\"android:statusBarColor\">@android:color/transparent</item>\n    <item name=\"android:windowSoftInputMode\">adjustResize</item>\n    </style>\n\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/my_styles.xml b/app/src/main/res/values/my_styles.xml
+--- a/app/src/main/res/values/my_styles.xml	(revision fd33a4a984763e3c0d26c525739acfadeceac2ef)
++++ b/app/src/main/res/values/my_styles.xml	(date 1691068423851)
+@@ -39,4 +39,9 @@
+     <item name="android:windowSoftInputMode">adjustResize</item>
+     </style>
+ 
++    <style name="Widget.Kleine.Button" parent="Widget.MaterialComponents.Button">
++        <item name="backgroundTint">@null</item>
++    </style>
++
++
+ </resources>
+\ No newline at end of file
+Index: app/src/main/res/drawable/background_btn_choose.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/background_btn_choose.xml b/app/src/main/res/drawable/background_btn_choose.xml
+new file mode 100644
+--- /dev/null	(date 1690896486833)
++++ b/app/src/main/res/drawable/background_btn_choose.xml	(date 1690896486833)
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="utf-8"?>
++<selector xmlns:android="http://schemas.android.com/apk/res/android">
++    <item>
++
++        <shape android:shape="rectangle">
++
++            <stroke android:color="#AFAFAF"
++                    android:width="2dp"
++                ></stroke>
++            <corners android:radius="5sp"/>
++        </shape>
++
++    </item>
++</selector>
+\ No newline at end of file
+Index: app/src/main/res/drawable/background_btn_choose_color.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/background_btn_choose_color.xml b/app/src/main/res/drawable/background_btn_choose_color.xml
+new file mode 100644
+--- /dev/null	(date 1690896486858)
++++ b/app/src/main/res/drawable/background_btn_choose_color.xml	(date 1690896486858)
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="utf-8"?>
++<selector xmlns:android="http://schemas.android.com/apk/res/android">
++    <item>
++
++        <shape android:shape="rectangle">
++
++            <stroke android:color="@color/primary_color"
++                android:width="1dp"
++                ></stroke>
++            <corners android:radius="5sp"/>
++        </shape>
++
++    </item>
++</selector>
+\ No newline at end of file
+Index: app/src/main/res/drawable/background_btn.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/background_btn.xml b/app/src/main/res/drawable/background_btn.xml
+new file mode 100644
+--- /dev/null	(date 1691053754382)
++++ b/app/src/main/res/drawable/background_btn.xml	(date 1691053754382)
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="utf-8"?>
++<selector xmlns:android="http://schemas.android.com/apk/res/android">
++    <item>
++        <shape>
++            <solid android:color="@color/white"/>
++            <corners android:radius="25sp"/>
++
++
++        </shape>
++    </item>
++</selector>
+\ No newline at end of file
+Index: app/src/main/res/drawable/background_top.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/background_top.xml b/app/src/main/res/drawable/background_top.xml
+new file mode 100644
+--- /dev/null	(date 1690896486936)
++++ b/app/src/main/res/drawable/background_top.xml	(date 1690896486936)
+@@ -0,0 +1,13 @@
++<?xml version="1.0" encoding="utf-8"?>
++<selector xmlns:android="http://schemas.android.com/apk/res/android">
++    <item>
++        <shape android:shape="rectangle">
++            <solid android:color="@color/primary_color"></solid>
++            <corners
++                    android:bottomLeftRadius="60sp"
++                    android:bottomRightRadius="60sp"
++                />
++        </shape>
++
++    </item>
++</selector>
+\ No newline at end of file
+Index: app/src/main/res/drawable/ic_back.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/ic_back.xml b/app/src/main/res/drawable/ic_back.xml
+new file mode 100644
+--- /dev/null	(date 1690896486963)
++++ b/app/src/main/res/drawable/ic_back.xml	(date 1690896486963)
+@@ -0,0 +1,5 @@
++<vector android:height="24dp" android:tint="#FFFFFF"
++    android:viewportHeight="24" android:viewportWidth="24"
++    android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
++    <path android:fillColor="@android:color/white" android:pathData="M17.77,3.77l-1.77,-1.77l-10,10l10,10l1.77,-1.77l-8.23,-8.23z"/>
++</vector>
+Index: app/src/main/res/drawable/background_btn_correct.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/background_btn_correct.xml b/app/src/main/res/drawable/background_btn_correct.xml
+new file mode 100644
+--- /dev/null	(date 1690896486885)
++++ b/app/src/main/res/drawable/background_btn_correct.xml	(date 1690896486885)
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="utf-8"?>
++<selector xmlns:android="http://schemas.android.com/apk/res/android">
++    <item>
++
++        <shape android:shape="rectangle">
++
++            <stroke android:color="#42DF00"
++                android:width="2dp"
++                ></stroke>
++            <corners android:radius="5sp"/>
++        </shape>
++
++    </item>
++</selector>
+\ No newline at end of file
+Index: app/src/main/res/drawable/background_btn_erreur.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/background_btn_erreur.xml b/app/src/main/res/drawable/background_btn_erreur.xml
+new file mode 100644
+--- /dev/null	(date 1690896486911)
++++ b/app/src/main/res/drawable/background_btn_erreur.xml	(date 1690896486911)
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="utf-8"?>
++<selector xmlns:android="http://schemas.android.com/apk/res/android">
++    <item>
++
++        <shape android:shape="rectangle">
++
++            <stroke android:color="#FF0000"
++                android:width="2dp"
++                ></stroke>
++            <corners android:radius="5sp"/>
++        </shape>
++
++    </item>
++</selector>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_voucher_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_voucher_item.xml b/app/src/main/res/layout/fragment_voucher_item.xml
+new file mode 100644
+--- /dev/null	(date 1691214243334)
++++ b/app/src/main/res/layout/fragment_voucher_item.xml	(date 1691214243334)
+@@ -0,0 +1,94 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content"
++    android:layout_margin="5dp"
++    android:padding="5dp"
++    app:cardBackgroundColor="@color/white"
++    app:cardCornerRadius="5dp"
++    app:cardElevation="5dp">
++
++    <androidx.constraintlayout.widget.ConstraintLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
++
++        <TextView
++            android:id="@+id/textViewVoucherName"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginStart="8dp"
++            android:layout_marginTop="16dp"
++            android:text="@string/voucherName"
++            app:layout_constraintStart_toStartOf="@+id/guideline3"
++            app:layout_constraintTop_toTopOf="parent" />
++
++        <androidx.constraintlayout.widget.Guideline
++            android:id="@+id/guideline3"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:orientation="vertical"
++            app:layout_constraintGuide_end="266dp" />
++
++        <ImageView
++            android:id="@+id/imageViewVoucher"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            app:layout_constraintBottom_toBottomOf="parent"
++            app:layout_constraintEnd_toStartOf="@+id/guideline3"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintTop_toTopOf="parent"
++            tools:src="@drawable/voucher" />
++
++        <TextView
++            android:id="@+id/textViewVoucherExpired"
++            android:layout_width="wrap_content"
++            android:layout_height="25dp"
++            android:layout_marginStart="8dp"
++            android:text="@string/voucherExpired"
++            android:textColor="#BEA9A9"
++            app:layout_constraintBottom_toBottomOf="@+id/textViewLabelVoucherExpiredDate"
++            app:layout_constraintStart_toEndOf="@+id/textViewLabelVoucherExpiredDate"
++            app:layout_constraintTop_toTopOf="@+id/textViewLabelVoucherExpiredDate" />
++
++        <TextView
++            android:id="@+id/textViewVoucherTerm"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginStart="8dp"
++            android:layout_marginTop="16dp"
++            android:background="#EDBABA"
++            android:text="@string/voucherTermsCondition"
++            app:layout_constraintStart_toStartOf="@+id/guideline3"
++            app:layout_constraintTop_toBottomOf="@+id/textViewVoucherExpired" />
++
++        <TextView
++            android:id="@+id/textViewLabelVoucherExpiredDate"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginStart="8dp"
++            android:layout_marginTop="16dp"
++            android:text="@string/labelVoucherExpiredDate"
++            app:layout_constraintStart_toStartOf="@+id/guideline3"
++            app:layout_constraintTop_toBottomOf="@+id/textViewVoucherName" />
++
++        <Button
++            android:id="@+id/buttonRedeem"
++            android:layout_width="110dp"
++            android:layout_height="60dp"
++            android:layout_marginStart="270dp"
++            android:layout_marginTop="16dp"
++            android:layout_marginEnd="10dp"
++            android:layout_marginBottom="8dp"
++            android:drawableEnd="@drawable/point"
++            android:text="50"
++            android:textStyle="bold"
++            app:layout_constraintBottom_toBottomOf="parent"
++            app:layout_constraintEnd_toEndOf="parent"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintTop_toBottomOf="@+id/textViewVoucherTerm" />
++
++    </androidx.constraintlayout.widget.ConstraintLayout>
++
++</androidx.cardview.widget.CardView>
+\ No newline at end of file
+Index: app/src/main/res/drawable/ic_launcher_foreground.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/ic_launcher_foreground.xml b/app/src/main/res/drawable/ic_launcher_foreground.xml
+new file mode 100644
+--- /dev/null	(date 1690896486779)
++++ b/app/src/main/res/drawable/ic_launcher_foreground.xml	(date 1690896486779)
+@@ -0,0 +1,30 @@
++<vector xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:aapt="http://schemas.android.com/aapt"
++    android:width="108dp"
++    android:height="108dp"
++    android:viewportWidth="108"
++    android:viewportHeight="108">
++    <path android:pathData="M31,63.928c0,0 6.4,-11 12.1,-13.1c7.2,-2.6 26,-1.4 26,-1.4l38.1,38.1L107,108.928l-32,-1L31,63.928z">
++        <aapt:attr name="android:fillColor">
++            <gradient
++                android:endX="85.84757"
++                android:endY="92.4963"
++                android:startX="42.9492"
++                android:startY="49.59793"
++                android:type="linear">
++                <item
++                    android:color="#44000000"
++                    android:offset="0.0" />
++                <item
++                    android:color="#00000000"
++                    android:offset="1.0" />
++            </gradient>
++        </aapt:attr>
++    </path>
++    <path
++        android:fillColor="#FFFFFF"
++        android:fillType="nonZero"
++        android:pathData="M65.3,45.828l3.8,-6.6c0.2,-0.4 0.1,-0.9 -0.3,-1.1c-0.4,-0.2 -0.9,-0.1 -1.1,0.3l-3.9,6.7c-6.3,-2.8 -13.4,-2.8 -19.7,0l-3.9,-6.7c-0.2,-0.4 -0.7,-0.5 -1.1,-0.3C38.8,38.328 38.7,38.828 38.9,39.228l3.8,6.6C36.2,49.428 31.7,56.028 31,63.928h46C76.3,56.028 71.8,49.428 65.3,45.828zM43.4,57.328c-0.8,0 -1.5,-0.5 -1.8,-1.2c-0.3,-0.7 -0.1,-1.5 0.4,-2.1c0.5,-0.5 1.4,-0.7 2.1,-0.4c0.7,0.3 1.2,1 1.2,1.8C45.3,56.528 44.5,57.328 43.4,57.328L43.4,57.328zM64.6,57.328c-0.8,0 -1.5,-0.5 -1.8,-1.2s-0.1,-1.5 0.4,-2.1c0.5,-0.5 1.4,-0.7 2.1,-0.4c0.7,0.3 1.2,1 1.2,1.8C66.5,56.528 65.6,57.328 64.6,57.328L64.6,57.328z"
++        android:strokeWidth="1"
++        android:strokeColor="#00000000" />
++</vector>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_voucher.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_voucher.xml b/app/src/main/res/layout/fragment_voucher.xml
+new file mode 100644
+--- /dev/null	(date 1685706431881)
++++ b/app/src/main/res/layout/fragment_voucher.xml	(date 1685706431881)
+@@ -0,0 +1,42 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:id="@+id/frameLayout3"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    tools:context=".ui.voucher.VoucherFragment" >
++
++    <androidx.recyclerview.widget.RecyclerView
++        android:id="@+id/voucherRecyclerView"
++        android:layout_width="409dp"
++        android:layout_height="590dp"
++        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/labelShippingVoucherTextView"
++        tools:listitem="@layout/fragment_voucher_item" />
++
++    <TextView
++        android:id="@+id/labelShippingVoucherTextView"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="8dp"
++        android:layout_marginTop="24dp"
++        android:text="@string/labelShippingVoucher"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++
++    <TextView
++        android:id="@+id/textViewNoVoucherMsg"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="@string/noVoucherMsg"
++        android:visibility="invisible"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file

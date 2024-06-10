@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="6dp"
+    android:elevation="6dp"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/rewardImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/ic_launcher"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#FF000000"/>
+
+        <TextView
+            android:id="@+id/rewardNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reward Name"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:textColor="#000"
+            android:layout_toRightOf="@+id/rewardImage"
+            android:layout_marginLeft="10dp"
+            />
+
+        <TextView
+            android:id="@+id/rewardDescriptionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reward Description"
+            android:textSize="25sp"
+            android:textColor="#000"
+            android:layout_toRightOf="@+id/rewardImage"
+            android:layout_below="@+id/rewardNameText"
+            android:layout_marginLeft="10dp"
+            />
+
+        <TextView
+            android:id="@+id/rewardPointsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reward Points"
+            android:textSize="25sp"
+            android:textColor="#000"
+            android:layout_toRightOf="@+id/rewardImage"
+            android:layout_below="@+id/rewardDescriptionText"
+            android:layout_marginLeft="10dp"
+            />
+
+        <TextView
+            android:id="@+id/redeemLimitText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Redeem Limit"
+            android:textSize="25sp"
+            android:textColor="#000"
+            android:layout_toRightOf="@+id/rewardImage"
+            android:layout_below="@+id/rewardPointsText"
+            android:layout_marginLeft="10dp"
+            />
+
+        <TextView
+            android:id="@+id/redeemedCountText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Redeemed Count"
+            android:textSize="25sp"
+            android:textColor="#000"
+            android:layout_toRightOf="@+id/rewardImage"
+            android:layout_below="@+id/redeemLimitText"
+            android:layout_marginLeft="10dp"
+            />
+
+        <LinearLayout
+            android:layout_below="@+id/redeemedCountText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="173dp"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:textAllCaps="false"
+                android:layout_marginRight="5dp"
+                android:id="@+id/btnEdit" />
+
+            <Button
+                android:layout_width="173dp"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:textAllCaps="false"
+                android:layout_marginLeft="5dp"
+                android:id="@+id/btnDelete" />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>

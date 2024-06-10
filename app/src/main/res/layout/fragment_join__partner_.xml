@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Join As Partner"
+        android:background="@color/black"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:textColor="#FFF"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:textSize="@dimen/_40sdp"
+        android:text="Waiting For Response"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:id="@+id/requestedText"
+        />
+    <TextView
+        android:id="@+id/instiNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Institution Name"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/rounded"
+        android:gravity="center"
+        android:id="@+id/instiName"/>
+
+    <TextView
+        android:id="@+id/instiTypeText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Institution Type"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/rounded"
+        android:gravity="center"
+        android:id="@+id/instiType"/>
+
+    <TextView
+        android:id="@+id/locText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Location"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/rounded"
+        android:gravity="center"
+        android:id="@+id/location"/>
+
+    <TextView
+        android:id="@+id/contactNoText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Contact Number"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/rounded"
+        android:gravity="center"
+        android:id="@+id/contactNo"/>
+
+    <TextView
+        android:id="@+id/reasonText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Reason To Be Partner"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/rounded"
+        android:gravity="center"
+        android:id="@+id/reason"/>
+
+    <TextView
+        android:id="@+id/docText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:text="Documentation"
+        android:textSize="20sp" />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/rounded"
+        android:text="upload pdf file"
+        android:gravity="center"
+        android:id="@+id/documentUploadBtn"/>
+
+
+    <Button
+        android:id="@+id/btnRequest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="25dp"
+        android:backgroundTint="@color/black"
+        android:gravity="center"
+        android:text="Request"
+        android:textAllCaps="false"
+        android:textSize="21dp" />
+
+    <Button
+        android:id="@+id/btnJoin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="25dp"
+        android:backgroundTint="@color/black"
+        android:gravity="center"
+        android:text="Join Again"
+        android:textAllCaps="false"
+        android:visibility="gone"
+        android:textSize="21dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:textSize="@dimen/_16sdp"
+        android:layout_margin="@dimen/_12sdp"
+        android:text="reject reason"
+        android:textStyle="bold"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        android:id="@+id/rejectText"
+        />
+</LinearLayout>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="regular_style">
+        <item name="android:textSize">@dimen/size_16</item>
+        <item name="android:color">@color/black</item>
+    </style>
+
+
+    <style name="BigTextViewThin">
+        <item name="android:textColor">#4b4f60</item>
+        <item name="android:textSize">@dimen/_20ssp</item>
+        <item name="fontFamily">@font/poppins_thin</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MediumTextViewThin">
+        <item name="android:textColor">#4b4f60</item>
+        <item name="android:textSize">@dimen/_15ssp</item>
+        <item name="fontFamily">@font/sf_pro_display</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SmallTextViewThin">
+        <item name="android:textColor">@color/g_hint</item>
+        <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="fontFamily">@font/sf_pro_display</item>
+    </style>
+
+    <style name="title_text">
+        <item name="android:fontFamily">@font/nunito_sans_semi_bold</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="EditTextSettings">
+        <item name="android:width">0dp</item>
+        <item name="height">@dimen/_45sdp</item>
+        <item name="fontFamily">@font/sf_pro_display</item>
+        <item name="background">@drawable/btn_white_background</item>
+        <item name="android:gravity">start</item>
+        <item name="android:textStyle">bold</item>
+        <item name="singleLine">true</item>
+        <item name="paddingStart">@dimen/_10sdp</item>
+    </style>
+
+    <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <!--quiz-->
+    <style name="Widget.Kleine.Button" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@null</item>
+    </style>
+
+    <style name="style_card_image">
+        <item name="android:layout_width">@dimen/_65sdp</item>
+        <item name="android:layout_height">@dimen/_65sdp</item>
+        <item name="android:layout_marginTop">@dimen/_14sdp</item>
+        <item name="android:layout_marginBottom">@dimen/_14sdp</item>
+        <item name="android:layout_marginStart">@dimen/_14sdp</item>
+    </style>
+
+    <style name="style_heart">
+        <item name="android:layout_width">@dimen/_14sdp</item>
+        <item name="android:layout_height">@dimen/_14sdp</item>
+        <item name="android:layout_marginEnd">@dimen/_12sdp</item>
+        <item name="android:background">@drawable/ic_heart</item>
+    </style>
+
+    <style name="style_text_white_small" parent="regular_style">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="style_text_black_norm" parent="regular_style">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/_14ssp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="style_primaryColor_bold" parent="regular_style">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/_16ssp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+</resources>

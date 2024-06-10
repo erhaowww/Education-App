@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="6dp"
+    android:elevation="6dp"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/ic_launcher"
+            android:id="@+id/user_img"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#FF000000"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameText"
+            android:text="Chin Khai Ray"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:textColor="#000"
+            android:layout_toRightOf="@+id/user_img"
+            android:layout_marginLeft="10dp"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/instiText"
+            android:layout_toRightOf="@+id/user_img"
+            android:layout_below="@+id/nameText"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Institution:"
+                android:textSize="25sp"
+                android:textColor="#000"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/instiNameType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Code Mastery \nIT Field"
+                android:textColor="#000"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/locationText"
+            android:layout_toRightOf="@+id/user_img"
+            android:layout_below="@+id/instiText"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location:"
+                android:textSize="25sp"
+                android:textColor="#000"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ABC Jalan Besar, Kuala Lumpur"
+                android:textSize="25sp"
+                android:textColor="#000"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/contactText"
+            android:layout_toRightOf="@+id/user_img"
+            android:layout_below="@+id/locationText"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact:"
+                android:textSize="25sp"
+                android:textColor="#000"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/contactNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="01234567890"
+                android:textSize="25sp"
+                android:textColor="#000"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/reasonText"
+            android:layout_toRightOf="@+id/user_img"
+            android:layout_below="@+id/contactText"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reason:"
+                android:textSize="25sp"
+                android:textColor="#000"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@id/reason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="i want to be partner"
+                android:textSize="25sp"
+                android:textColor="#000"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/documentText"
+            android:layout_toRightOf="@+id/user_img"
+            android:layout_below="@+id/reasonText"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Document:"
+                android:textSize="25sp"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:paddingTop="@dimen/_6sdp"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:padding="@dimen/_6sdp"
+                    android:id="@+id/pdfFile1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="123.pdf"
+                    android:textSize="25sp"
+                    android:textColor="@color/g_blue"
+                    android:clickable="true"
+                    android:onClick="openPdfFile1"
+                    />
+                <TextView
+                    android:padding="@dimen/_6sdp"
+                    android:id="@+id/pdfFile2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="456.pdf"
+                    android:textSize="25sp"
+                    android:textColor="@color/g_blue"
+                    android:clickable="true"
+                    android:onClick="openPdfFile2"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/documentText"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnApprove"
+                android:layout_width="173dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:backgroundTint="@color/black"
+                android:text="Approve"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnReject"
+                android:layout_width="173dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:backgroundTint="@color/black"
+                android:text="Reject"
+                android:textAllCaps="false" />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>

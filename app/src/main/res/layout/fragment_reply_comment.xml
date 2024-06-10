@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/subject_img"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textTitleLayout"
+        app:srcCompat="@drawable/math" />
+
+    <LinearLayout
+        android:id="@+id/textTitleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subject_img"
+        android:orientation="horizontal">
+        <TextView
+
+            android:id="@+id/subject_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lineSpacingExtra="4dp"
+            android:text="Math"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/ratingLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/string_rate"
+                android:gravity="center_vertical"
+                android:src="@drawable/ic_star">
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/rating"
+                style="@style/style_text_black_norm"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:fontFamily="casual"
+                android:gravity="center_vertical"
+                android:text="4"
+                android:textSize="@dimen/_14ssp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+
+
+    <View
+        android:background="#2e2e2e"
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/comment_detail_date_name" />
+
+    <TextView
+        android:textSize="12sp"
+        android:id="@+id/comment_detail_date_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="2023-05-05 12:00:00 | by Chin Zi Xin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/user_comment_text"/>
+
+    <TextView
+
+        android:textColor="#373737"
+        android:lineSpacingExtra="8dp"
+        android:id="@+id/user_comment_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="very nice math. good material.\nvery nice math. good material.\nvery nice math. good material."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textTitleLayout" />
+
+    <ImageView
+        android:id="@+id/replier"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/post_detail_comment"
+        app:layout_constraintBottom_toBottomOf="@+id/post_detail_comment"
+        android:src="@drawable/ic_launcher_foreground"
+        android:background="@color/black"/>
+
+    <EditText
+
+        android:id="@+id/post_detail_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/edittext_button_style_rounded"
+        android:ems="10"
+        android:layout_marginTop="12dp"
+        android:hint="Write Comment"
+        android:inputType="textMultiLine"
+        app:layout_constraintStart_toEndOf="@+id/replier"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+
+    <Button
+        android:id="@+id/post_detail_add_comment_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Reply"
+        android:backgroundTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/post_detail_comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/post_detail_comment"
+        app:layout_constraintTop_toTopOf="@+id/post_detail_comment"
+        app:layout_constraintVertical_bias="0.529" />
+
+    <ImageView
+        android:id="@+id/post_detail_user_img"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/comment_detail_date_name"
+        app:layout_constraintStart_toEndOf="@+id/comment_detail_date_name"
+        app:layout_constraintTop_toTopOf="@+id/comment_detail_date_name"
+        android:src="@drawable/ic_launcher_foreground"
+        android:background="@color/black" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

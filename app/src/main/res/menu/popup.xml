@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/edit_material"
+        android:title="Edit Material" />
+
+    <item
+        android:id="@+id/disable_material"
+        android:title="Make it Disabled"/>
+
+    <item
+        android:id="@+id/enable_material"
+        android:title="Make Available"/>
+</menu>

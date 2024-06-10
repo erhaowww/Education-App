@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_8sdp"
+    android:background="@drawable/rounded_background"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/comment_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Comment"
+        android:textColor="@color/white"
+        android:padding="10dp"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/down_arrow_comment"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/down_arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/comment_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/comment_title"
+        app:tint="@color/white" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/materialCommentData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/card_background"
+        android:layout_marginTop="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/comment_title"
+        tools:layout_editor_absoluteX="10dp"
+        tools:listitem="@layout/recycler_view_material_comment" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

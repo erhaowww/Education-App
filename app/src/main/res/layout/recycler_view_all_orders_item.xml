@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="productModel"
+            type="com.example.kleine.model.Material" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/parent_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:id="@+id/btnAllCourses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/img_order_state"
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_circle" />
+
+            <TextView
+                android:id="@+id/tv_order_id"
+                style="@style/MediumTextViewThin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:text="@{productModel.name}" />
+
+            <ImageView
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:src="@drawable/ic_arrow" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_order_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{String.valueOf(productModel.desc)}" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/line"
+            android:backgroundTint="@color/g_icon_tint" />
+    </LinearLayout>
+</layout>

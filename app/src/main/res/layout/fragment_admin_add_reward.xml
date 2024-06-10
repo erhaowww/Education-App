@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- This is where you can define data elements. As an example: -->
+    <data>
+        <!-- Variables can be defined here. For instance: -->
+        <!-- <variable name="viewModel" type="com.yourpackage.YourViewModel" /> -->
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <!-- Title TextView -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Add New Reward"
+                android:background="@color/purple_500"
+                android:textSize="25dp"
+                android:gravity="center"
+                android:textColor="#FFF"/>
+
+            <!-- Image Upload and Preview -->
+            <ImageView
+                android:id="@+id/imgRewardPreview"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@android:drawable/ic_menu_gallery" /> <!-- Example icon for selecting image -->
+
+            <!-- Reward Name -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:text="Reward Name"/>
+
+            <EditText
+                android:id="@+id/txtRewardName"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/rounded"
+                android:gravity="center"/>
+
+            <!-- Reward Description -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:text="Reward Description"/>
+
+            <EditText
+                android:id="@+id/txtRewardDescription"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/rounded"
+                android:gravity="center"/>
+
+            <!-- Reward Points -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:text="Reward Points"/>
+
+            <EditText
+                android:id="@+id/txtRewardPoints"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/rounded"
+                android:gravity="center"
+                android:inputType="number"/>
+
+            <!-- Redeem Limit -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:text="Redeem Limit"/>
+
+            <EditText
+                android:id="@+id/txtRedeemLimit"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/rounded"
+                android:gravity="center"
+                android:inputType="number"/>
+
+            <!-- Save Button -->
+            <Button
+                android:id="@+id/btnAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="25dp"
+                android:layout_marginTop="10dp"
+                android:text="Save"
+                android:textSize="21dp"
+                android:textAllCaps="false"
+                android:background="@drawable/rounded"
+                android:gravity="center"/>
+
+            <!-- Back Button -->
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="25dp"
+                android:layout_marginTop="10dp"
+                android:text="Back"
+                android:textSize="21dp"
+                android:textAllCaps="false"
+                android:background="@drawable/rounded"
+                android:gravity="center"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</layout>

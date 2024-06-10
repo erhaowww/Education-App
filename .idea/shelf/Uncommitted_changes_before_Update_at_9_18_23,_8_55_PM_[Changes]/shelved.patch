@@ -1,0 +1,1311 @@
+Index: app/src/main/java/com/example/kleine/model/User.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.kleine.model\n\nimport android.os.Parcelable\nimport kotlinx.parcelize.Parcelize\n\nenum class Status {\n    USERS, PENDING, PARTNERSHIP\n}\n\n@Parcelize\ndata class User(\n    var firstName: String,\n    var lastName: String,\n    var email: String,\n    var imagePath: String = \"\",\n    var status: Status = Status.USERS\n): Parcelable {\n\n    constructor() : this(\"\",\"\",\"\",\"\", Status.USERS)\n\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/model/User.kt b/app/src/main/java/com/example/kleine/model/User.kt
+--- a/app/src/main/java/com/example/kleine/model/User.kt	
++++ b/app/src/main/java/com/example/kleine/model/User.kt	
+@@ -1,22 +1,29 @@
+ package com.example.kleine.model
+ 
+ import android.os.Parcelable
++import androidx.room.Entity
++import androidx.room.PrimaryKey
++import androidx.room.TypeConverters
+ import kotlinx.parcelize.Parcelize
+ 
++import com.example.kleine.converters.StatusConverter
++
+ enum class Status {
+     USERS, PENDING, PARTNERSHIP
+ }
+ 
++@Entity(tableName = "users")
++@TypeConverters(StatusConverter::class)
+ @Parcelize
+ data class User(
++    @PrimaryKey(autoGenerate = true)
++    val id: Int = 0,
+     var firstName: String,
+     var lastName: String,
+     var email: String,
++    var password: String = "", // New field for storing hashed password
+     var imagePath: String = "",
+     var status: Status = Status.USERS
+-): Parcelable {
+-
+-    constructor() : this("","","","", Status.USERS)
+-
+-}
+-
++) : Parcelable {
++    constructor() : this(0, "", "", "", "", "", Status.USERS)
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/kleine/viewmodel/lunchapp/KleineViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.kleine.viewmodel.lunchapp\n\nimport androidx.lifecycle.MutableLiveData\nimport androidx.lifecycle.ViewModel\nimport com.example.kleine.firebaseDatabase.FirebaseDb\nimport com.example.kleine.model.User\nimport com.example.kleine.resource.Resource\nimport com.google.firebase.auth.FirebaseAuth\nimport com.google.firebase.auth.GoogleAuthProvider\nimport com.google.firebase.auth.ktx.auth\nimport com.google.firebase.firestore.FirebaseFirestore\nimport com.google.firebase.ktx.Firebase\nimport androidx.lifecycle.LiveData\nimport androidx.lifecycle.ViewModelProvider\nimport com.google.android.gms.tasks.Task\nimport com.google.firebase.firestore.DocumentSnapshot\n\n\nclass KleineViewModel(\n    private val firebaseDatabase: FirebaseDb\n\n\n) : ViewModel() {\n\n\n\n    private val _currentUser = MutableLiveData<User>()\n    val currentUser: LiveData<User> = _currentUser\n\n    private val usersCollectionRef = FirebaseFirestore.getInstance().collection(\"users\")\n\n    val saveUserInformationGoogleSignIn = MutableLiveData<Resource<String>>()\n    val register = MutableLiveData<Resource<User>>()\n\n\n\n    val login = MutableLiveData<Boolean>()\n    val loginError = MutableLiveData<String>()\n\n    val resetPassword = MutableLiveData<Resource<String>>()\n\n    fun registerNewUser(user: User, password: String) {\n        register.postValue(Resource.Loading())\n        firebaseDatabase.createNewUser(user.email, password).addOnCompleteListener { task ->\n            if (task.isSuccessful) {\n                firebaseDatabase.saveUserInformation(Firebase.auth.currentUser!!.uid, user) { exception ->\n                    if (exception == null) {\n                        register.postValue(Resource.Success(user))\n                    } else {\n                        register.postValue(Resource.Error(exception.toString()))\n                    }\n                }\n            } else {\n                task.exception?.let { register.postValue(Resource.Error(it.toString())) }\n            }\n        }\n    }\n\n\n    private fun saveUserInformationGoogleSignIn(userUid: String, user: User) {\n        firebaseDatabase.checkUserByEmail(user.email) { error, isAccountExisted ->\n            if (error != null) {\n                saveUserInformationGoogleSignIn.postValue(Resource.Error(error))\n            } else {\n                if (isAccountExisted!!) {\n                    saveUserInformationGoogleSignIn.postValue(Resource.Success(userUid))\n                } else {\n                    firebaseDatabase.saveUserInformation(userUid, user) { exception ->\n                        if (exception == null) {\n                            saveUserInformationGoogleSignIn.postValue(Resource.Success(userUid))\n                        } else {\n                            saveUserInformationGoogleSignIn.postValue(Resource.Error(exception.toString()))\n                        }\n                    }\n                }\n            }\n        }\n    }\n\n\n\n    fun loginUser(\n        email: String,\n        password: String\n    ) = firebaseDatabase.loginUser(email, password).addOnCompleteListener {\n        if (it.isSuccessful)\n            login.postValue(true)\n        else\n            loginError.postValue(it.exception.toString())\n    }\n\n    fun resetPassword(email: String) {\n        resetPassword.postValue(Resource.Loading())\n        firebaseDatabase.resetPassword(email).addOnCompleteListener {\n            if (it.isSuccessful)\n                resetPassword.postValue(Resource.Success(email))\n            else\n                resetPassword.postValue(Resource.Error(it.exception.toString()))\n\n        }\n    }\n\n    fun signInWithGoogle(idToken: String) {\n        saveUserInformationGoogleSignIn.postValue(Resource.Loading())\n        val credential = GoogleAuthProvider.getCredential(idToken, null)\n        firebaseDatabase.signInWithGoogle(credential).addOnCompleteListener { task ->\n\n            if (task.isSuccessful) {\n                val userFirebase = FirebaseAuth.getInstance().currentUser\n                val fullNameArray = userFirebase!!.displayName?.split(\" \")\n                val firstName = fullNameArray!![0]\n                val size = fullNameArray.size\n                var secondName = \"\"\n                if (size == 1)\n                    secondName = \"\"\n                else\n                    secondName = fullNameArray[1]\n\n                val user = User(firstName, secondName, userFirebase.email.toString(), \"\")\n                saveUserInformationGoogleSignIn(userFirebase.uid, user)\n            } else\n                saveUserInformationGoogleSignIn.postValue(Resource.Error(task.exception.toString()))\n\n\n        }\n    }\n\n    fun logOut(){\n        firebaseDatabase.logout()\n    }\n\n    fun isUserSignedIn() : Boolean {\n        if (FirebaseAuth.getInstance().currentUser?.uid != null)\n            return true\n        return false\n\n    }\n\n    fun getUser(userId: String): Task<DocumentSnapshot> {\n        return usersCollectionRef.document(userId).get()\n    }\n\n    fun fetchCurrentUser(userId: String) {\n        getUser(userId).addOnSuccessListener { document ->\n            if (document != null) {\n                val user = document.toObject(User::class.java)\n                if (user != null) {\n                    _currentUser.postValue(user)\n                } else {\n                    // Handle the case where the document couldn't be converted to a User\n                    // You could post a null value, an error message, or any other appropriate action\n                    _currentUser.postValue(null)\n                }\n            } else {\n                // Handle the case where the document is null\n                // You could post a null value, an error message, or any other appropriate action\n                _currentUser.postValue(null)\n            }\n        }\n    }\n\n\n\n\n\n\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/viewmodel/lunchapp/KleineViewModel.kt b/app/src/main/java/com/example/kleine/viewmodel/lunchapp/KleineViewModel.kt
+--- a/app/src/main/java/com/example/kleine/viewmodel/lunchapp/KleineViewModel.kt	
++++ b/app/src/main/java/com/example/kleine/viewmodel/lunchapp/KleineViewModel.kt	
+@@ -1,7 +1,11 @@
+ package com.example.kleine.viewmodel.lunchapp
+ 
++import android.content.Context
++import android.widget.Toast
++import androidx.lifecycle.LiveData
+ import androidx.lifecycle.MutableLiveData
+ import androidx.lifecycle.ViewModel
++import androidx.lifecycle.viewModelScope
+ import com.example.kleine.firebaseDatabase.FirebaseDb
+ import com.example.kleine.model.User
+ import com.example.kleine.resource.Resource
+@@ -10,51 +14,103 @@
+ import com.google.firebase.auth.ktx.auth
+ import com.google.firebase.firestore.FirebaseFirestore
+ import com.google.firebase.ktx.Firebase
+-import androidx.lifecycle.LiveData
+-import androidx.lifecycle.ViewModelProvider
+ import com.google.android.gms.tasks.Task
+ import com.google.firebase.firestore.DocumentSnapshot
++import kotlinx.coroutines.CoroutineScope
++import kotlinx.coroutines.Dispatchers
++import kotlinx.coroutines.launch
++import kotlinx.coroutines.withContext
++import java.math.BigInteger
++import java.security.MessageDigest
++import androidx.lifecycle.Observer
++import com.example.kleine.DAO.UserDao
+ 
+ 
+ class KleineViewModel(
+-    private val firebaseDatabase: FirebaseDb
++    private val firebaseDatabase: FirebaseDb,
++    private val appDatabase: AppDatabase?
+ 
+ 
+ ) : ViewModel() {
+ 
+-
+-
+-    private val _currentUser = MutableLiveData<User>()
+-    val currentUser: LiveData<User> = _currentUser
+-
+-    private val usersCollectionRef = FirebaseFirestore.getInstance().collection("users")
+-
+-    val saveUserInformationGoogleSignIn = MutableLiveData<Resource<String>>()
+     val register = MutableLiveData<Resource<User>>()
+-
+-
+-
+     val login = MutableLiveData<Boolean>()
+     val loginError = MutableLiveData<String>()
+-
+     val resetPassword = MutableLiveData<Resource<String>>()
+ 
++
++//    private var appDatabase: AppDatabase? = null
++
++    private val _currentUser = MutableLiveData<User?>()
++    val currentUser: MutableLiveData<User?> = _currentUser
++
++    private val usersCollectionRef = FirebaseFirestore.getInstance().collection("users")
++
++    val saveUserInformationGoogleSignIn = MutableLiveData<Resource<String>>()
++//    val register = MutableLiveData<Resource<User>>()
++//
++//
++//
++//    val login = MutableLiveData<Boolean>()
++//    val loginError = MutableLiveData<String>()
++//
++//    val resetPassword = MutableLiveData<Resource<String>>()
++
++
++
++    fun hashPassword(password: String): String {
++        val messageDigest = MessageDigest.getInstance("SHA-256")
++        messageDigest.update(password.toByteArray())
++        val hashedString = BigInteger(1, messageDigest.digest()).toString(16)
++        return hashedString
++    }
++
++    fun registerNewUserInLocalDb(user: User) {
++        viewModelScope.launch(Dispatchers.IO) {
++            appDatabase?.userDao()?.insertUser(user)  // Make sure the function name matches with your UserDao function
++        }
++    }
++
++    // Inside ViewModel
++    fun findUserByEmailInLocalDb(email: String) {
++        viewModelScope.launch {
++            val user = withContext(Dispatchers.IO) {
++                appDatabase?.userDao()?.findUserByEmail(email)
++            }
++            _currentUser.postValue(user)
++        }
++    }
++
++
++
++
++
++
++    // Registration
+     fun registerNewUser(user: User, password: String) {
+         register.postValue(Resource.Loading())
++        val hashedPassword = hashPassword(password)
++        user.password = hashedPassword
+         firebaseDatabase.createNewUser(user.email, password).addOnCompleteListener { task ->
+             if (task.isSuccessful) {
+                 firebaseDatabase.saveUserInformation(Firebase.auth.currentUser!!.uid, user) { exception ->
+                     if (exception == null) {
+                         register.postValue(Resource.Success(user))
++                        // Insert into local db
++                        registerNewUserInLocalDb(user)
+                     } else {
+                         register.postValue(Resource.Error(exception.toString()))
++
+                     }
+                 }
+             } else {
+                 task.exception?.let { register.postValue(Resource.Error(it.toString())) }
+             }
+         }
++
++
+     }
++
+ 
+ 
+     private fun saveUserInformationGoogleSignIn(userUid: String, user: User) {
+@@ -78,16 +134,39 @@
+     }
+ 
+ 
+-
+-    fun loginUser(
+-        email: String,
+-        password: String
+-    ) = firebaseDatabase.loginUser(email, password).addOnCompleteListener {
+-        if (it.isSuccessful)
+-            login.postValue(true)
+-        else
+-            loginError.postValue(it.exception.toString())
++    fun loginUser(email: String, password: String) {
++        val hashedPassword = hashPassword(password)
++        viewModelScope.launch(Dispatchers.IO) {
++            val localUser = appDatabase?.userDao()?.findUserByEmail(email)
++            withContext(Dispatchers.Main) {
++                if (localUser != null && localUser.password == hashedPassword) {
++                    login.postValue(true)
++                } else {
++                    firebaseDatabase.loginUser(email, password).addOnCompleteListener { task ->
++                        if (task.isSuccessful) {
++                            login.postValue(true)
++                        } else {
++                            loginError.postValue("Login failed!")
++                        }
++                    }
++                }
++            }
++        }
+     }
++
++
++
++
++
++    fun isNetworkAvailable(): Boolean {
++        // Implement your network check logic here
++        return true // Replace this with actual check
++    }
++
++
++
++
++
+ 
+     fun resetPassword(email: String) {
+         resetPassword.postValue(Resource.Loading())
+@@ -100,30 +179,6 @@
+         }
+     }
+ 
+-    fun signInWithGoogle(idToken: String) {
+-        saveUserInformationGoogleSignIn.postValue(Resource.Loading())
+-        val credential = GoogleAuthProvider.getCredential(idToken, null)
+-        firebaseDatabase.signInWithGoogle(credential).addOnCompleteListener { task ->
+-
+-            if (task.isSuccessful) {
+-                val userFirebase = FirebaseAuth.getInstance().currentUser
+-                val fullNameArray = userFirebase!!.displayName?.split(" ")
+-                val firstName = fullNameArray!![0]
+-                val size = fullNameArray.size
+-                var secondName = ""
+-                if (size == 1)
+-                    secondName = ""
+-                else
+-                    secondName = fullNameArray[1]
+-
+-                val user = User(firstName, secondName, userFirebase.email.toString(), "")
+-                saveUserInformationGoogleSignIn(userFirebase.uid, user)
+-            } else
+-                saveUserInformationGoogleSignIn.postValue(Resource.Error(task.exception.toString()))
+-
+-
+-        }
+-    }
+ 
+     fun logOut(){
+         firebaseDatabase.logout()
+Index: app/src/main/java/com/example/kleine/viewmodel/shopping/ShoppingViewModelProviderFactory.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.kleine.viewmodel.shopping\n\nimport androidx.lifecycle.ViewModel\nimport androidx.lifecycle.ViewModelProvider\nimport com.example.kleine.firebaseDatabase.FirebaseDb\n\nclass ShoppingViewModelProviderFactory(\n    val db:FirebaseDb\n) : ViewModelProvider.Factory {\n    override fun <T : ViewModel?> create(modelClass: Class<T>): T {\n        return ShoppingViewModel(db) as T\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/viewmodel/shopping/ShoppingViewModelProviderFactory.kt b/app/src/main/java/com/example/kleine/viewmodel/shopping/ShoppingViewModelProviderFactory.kt
+--- a/app/src/main/java/com/example/kleine/viewmodel/shopping/ShoppingViewModelProviderFactory.kt	
++++ b/app/src/main/java/com/example/kleine/viewmodel/shopping/ShoppingViewModelProviderFactory.kt	
+@@ -3,11 +3,22 @@
+ import androidx.lifecycle.ViewModel
+ import androidx.lifecycle.ViewModelProvider
+ import com.example.kleine.firebaseDatabase.FirebaseDb
++import com.example.kleine.util.NetworkChecker
++import com.example.kleine.viewmodel.lunchapp.AppDatabase
++import com.example.kleine.viewmodel.lunchapp.KleineViewModel
+ 
+ class ShoppingViewModelProviderFactory(
+-    val db:FirebaseDb
++    val db:FirebaseDb,
++    val appDatabase: AppDatabase, // Assuming you have AppDatabase imported
++    val networkChecker: NetworkChecker  // New parameter
++
++
+ ) : ViewModelProvider.Factory {
+-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+-        return ShoppingViewModel(db) as T
++
++    override fun <T : ViewModel> create(modelClass: Class<T>): T {
++        if (modelClass.isAssignableFrom(ShoppingViewModel::class.java)) {
++            return ShoppingViewModel(db, appDatabase, networkChecker) as T  // Include networkChecker here
++        }
++        throw IllegalArgumentException("Unknown ViewModel class")
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/kleine/firebaseDatabase/FirebaseDb.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.kleine.firebaseDatabase\n\nimport android.util.Log\nimport com.example.kleine.model.*\nimport com.example.kleine.util.Constants.Companion.ADDRESS_COLLECTION\nimport com.example.kleine.util.Constants.Companion.BEST_DEALS\nimport com.example.kleine.util.Constants.Companion.CART_COLLECTION\nimport com.example.kleine.util.Constants.Companion.CATEGORIES_COLLECTION\nimport com.example.kleine.util.Constants.Companion.CATEGORY\nimport com.example.kleine.util.Constants.Companion.CHAIR_CATEGORY\nimport com.example.kleine.util.Constants.Companion.CLOTHES\nimport com.example.kleine.util.Constants.Companion.COLOR\nimport com.example.kleine.util.Constants.Companion.CUPBOARD_CATEGORY\nimport com.example.kleine.util.Constants.Companion.ID\nimport com.example.kleine.util.Constants.Companion.ORDERS\nimport com.example.kleine.util.Constants.Companion.ORDER_CONFIRM_STATE\nimport com.example.kleine.util.Constants.Companion.ORDER_PLACED_STATE\nimport com.example.kleine.util.Constants.Companion.PRICE\nimport com.example.kleine.util.Constants.Companion.PRODUCTS_COLLECTION\nimport com.example.kleine.util.Constants.Companion.QUANTITY\nimport com.example.kleine.util.Constants.Companion.SIZE\nimport com.example.kleine.util.Constants.Companion.STORES_COLLECTION\nimport com.example.kleine.util.Constants.Companion.TITLE\nimport com.example.kleine.util.Constants.Companion.USERS_COLLECTION\nimport com.google.android.gms.tasks.Task\nimport com.google.firebase.auth.AuthCredential\nimport com.google.firebase.auth.FirebaseAuth\nimport com.google.firebase.auth.ktx.auth\nimport com.google.firebase.firestore.DocumentSnapshot\nimport com.google.firebase.firestore.Query\nimport com.google.firebase.firestore.Transaction\nimport com.google.firebase.firestore.ktx.firestore\nimport com.google.firebase.ktx.Firebase\nimport com.google.firebase.storage.FirebaseStorage\nimport com.google.firebase.storage.UploadTask\nimport com.google.firebase.storage.ktx.storage\nimport java.util.*\nimport kotlin.collections.ArrayList\nimport kotlin.collections.HashMap\nimport kotlin.random.Random\n\nclass FirebaseDb {\n    private val usersCollectionRef = Firebase.firestore.collection(USERS_COLLECTION)\n    private val productsCollection = Firebase.firestore.collection(PRODUCTS_COLLECTION)\n    private val categoriesCollection = Firebase.firestore.collection(CATEGORIES_COLLECTION)\n    private val storesCollection = Firebase.firestore.collection(STORES_COLLECTION)\n    private val firebaseStorage = Firebase.storage.reference\n\n    val userUid = FirebaseAuth.getInstance().currentUser?.uid\n\n    private val userCartCollection = userUid?.let {\n        Firebase.firestore.collection(USERS_COLLECTION).document(it).collection(CART_COLLECTION)\n    }\n    private val userAddressesCollection = userUid?.let {\n        Firebase.firestore.collection(USERS_COLLECTION).document(it).collection(ADDRESS_COLLECTION)\n\n    }\n\n\n    private val firebaseAuth = Firebase.auth\n\n    fun getProductsByCategory(category: String,page:Long) =\n        productsCollection.whereEqualTo(CATEGORY,category).limit(page).get()\n\n\n    fun getMostRequestedProducts(category: String,page:Long) =\n        productsCollection.whereEqualTo(CATEGORY, category)\n            .orderBy(ORDERS, Query.Direction.DESCENDING).limit(page).get()\n\n\n    fun createNewUser(\n        email: String, password: String\n    ) = firebaseAuth.createUserWithEmailAndPassword(email, password)\n\n    fun saveUserInformation(userUid: String, user: User, completion: (Exception?) -> Unit) {\n        usersCollectionRef.document(userUid).set(user)\n            .addOnSuccessListener { completion(null) }\n            .addOnFailureListener { e -> completion(e) }\n    }\n\n\n\n\n    fun loginUser(\n        email: String,\n        password: String\n    ) = firebaseAuth.signInWithEmailAndPassword(email, password)\n\n    fun getClothesProducts(pagingPage: Long) =\n        productsCollection.whereEqualTo(CATEGORY, CLOTHES).limit(pagingPage).get()\n\n    fun getBestDealsProducts(pagingPage: Long) =\n        productsCollection.whereEqualTo(CATEGORY, BEST_DEALS).limit(pagingPage).get()\n\n    fun getHomeProducts(pagingPage: Long) =\n        productsCollection.limit(pagingPage).get()\n\n    //add order by orders\n    fun getMostOrderedCupboard(pagingPage: Long) =\n        productsCollection.whereEqualTo(CATEGORY, CUPBOARD_CATEGORY).limit(pagingPage)\n            .orderBy(ORDERS, Query.Direction.DESCENDING).limit(pagingPage).get()\n\n    fun getCupboards(pagingPage: Long) =\n        productsCollection.whereEqualTo(CATEGORY, CUPBOARD_CATEGORY).limit(pagingPage)\n            .limit(pagingPage).get()\n\n    fun addProductToCart(product: CartProduct) = userCartCollection?.document()!!.set(product)\n\n    fun getProductInCart(product: CartProduct) = userCartCollection!!\n        .whereEqualTo(ID, product.id)\n        .whereEqualTo(COLOR, product.color)\n        .whereEqualTo(SIZE, product.size).get()\n\n    fun increaseProductQuantity(documentId: String): Task<Transaction> {\n        val document = userCartCollection!!.document(documentId)\n        return Firebase.firestore.runTransaction { transaction ->\n            val productBefore = transaction.get(document)\n            var quantity = productBefore.getLong(QUANTITY)\n            quantity = quantity!! + 1\n            transaction.update(document, QUANTITY, quantity)\n        }\n\n    }\n\n    fun getItemsInCart() = userCartCollection!!\n\n    fun decreaseProductQuantity(documentId: String): Task<Transaction> {\n        val document = userCartCollection!!.document(documentId)\n        return Firebase.firestore.runTransaction { transaction ->\n            val productBefore = transaction.get(document)\n            var quantity = productBefore.getLong(QUANTITY)\n            quantity = if (quantity!!.toInt() == 1)\n                1\n            else\n                quantity - 1\n            transaction.update(document, QUANTITY, quantity)\n\n        }\n\n    }\n\n    fun deleteProductFromCart(documentId: String) =\n        userCartCollection!!.document(documentId).delete()\n\n\n    fun searchProducts(searchQuery: String) = productsCollection\n        .orderBy(\"title\")\n        .startAt(searchQuery)\n        .endAt(\"\\u03A9+$searchQuery\")\n        .limit(5)\n        .get()\n\n    fun getCategories() = categoriesCollection.orderBy(\"rank\").get()\n\n    fun getProductFromCartProduct(cartProduct: CartProduct) =\n        productsCollection.whereEqualTo(ID, cartProduct.id)\n            .whereEqualTo(TITLE, cartProduct.name)\n            .whereEqualTo(PRICE, cartProduct.price).get()\n\n    fun saveNewAddress(address: Address) = userAddressesCollection?.add(address)\n\n    fun getAddresses() = userAddressesCollection\n\n    fun findAddress(address: Address) = userAddressesCollection!!\n        .whereEqualTo(\"addressTitle\", address.addressTitle)\n        .whereEqualTo(\"fullName\", address.fullName).get()\n\n    fun updateAddress(documentUid: String, address: Address) =\n        userAddressesCollection?.document(documentUid)?.set(address)\n\n    fun deleteAddress(documentUid: String, address: Address) =\n        userAddressesCollection?.document(documentUid)?.delete()\n\n    fun placeOrder(products: List<CartProduct>, address: Address, order: Order) =\n        Firebase.firestore.runBatch { batch ->\n            //filter every product to its store\n            /**\n             * create a map of products that has the size of stores list,\n            the map has stores name as keys\n             */\n\n            val stores = ArrayList<String>()\n            products.forEach { cartProduct ->\n                if (!stores.contains(cartProduct.store)) {\n                    stores.add(cartProduct.store)\n                }\n            }\n\n            val productsMap = HashMap<String, ArrayList<CartProduct>>(stores.size)\n            stores.forEach { storeName ->\n                val tempList = ArrayList<CartProduct>()\n                products.forEach { cartProduct ->\n                    if (cartProduct.store == storeName)\n                        tempList.add(cartProduct)\n                    productsMap[storeName] = tempList\n                }\n            }\n\n\n            /**\n            // Adding order,address and products to each store\n             */\n            productsMap.forEach {\n                val store = it.key\n                val orderProducts = it.value\n                val orderNum = order.id\n                var price = 0\n\n                orderProducts.forEach { it2 ->\n                    if (it2.newPrice != null && it2.newPrice.isNotEmpty()) {\n                        price += it2.newPrice.toInt() * it2.quantity\n                    } else\n                        price += it2.price.toInt() * it2.quantity\n                }\n\n                Log.d(\"test\", \"$store $price\")\n\n                val storeOrder = Order(\n                    orderNum.toString(),\n                    Calendar.getInstance().time,\n                    price.toString(),\n                    ORDER_PLACED_STATE\n                )\n\n                val storeDocument = storesCollection\n                    .document(store)\n                    .collection(\"orders\")\n                    .document()\n\n                batch.set(storeDocument, storeOrder)\n\n                val storeOrderAddress = storeDocument.collection(ADDRESS_COLLECTION).document()\n                batch.set(storeOrderAddress, address)\n\n\n                orderProducts.forEach {\n                    val storeOrderProducts =\n                        storeDocument.collection(PRODUCTS_COLLECTION).document()\n                    batch.set(storeOrderProducts, it)\n                }\n\n\n            }\n\n            /**\n            // Adding order,address and products to the user\n             */\n            val userOrderDocument =\n                usersCollectionRef.document(FirebaseAuth.getInstance().currentUser!!.uid)\n                    .collection(\"orders\").document()\n            batch.set(userOrderDocument, order)\n\n            products.forEach {\n                val userProductDocument =\n                    userOrderDocument.collection(PRODUCTS_COLLECTION).document()\n                batch.set(userProductDocument, it)\n            }\n\n            val userAddressDocument = userOrderDocument.collection(ADDRESS_COLLECTION).document()\n\n            batch.set(userAddressDocument, address)\n\n        }.also {\n            deleteCartItems()\n        }\n\n    private fun deleteCartItems() {\n        userCartCollection?.get()?.addOnSuccessListener {\n            Firebase.firestore.runBatch { batch ->\n                it.documents.forEach {\n                    val document = userCartCollection.document(it.id)\n                    batch.delete(document)\n                }\n            }\n        }\n    }\n\n\n    fun getUser() = usersCollectionRef\n        .document(FirebaseAuth.getInstance().currentUser!!.uid)\n\n\n    fun uploadUserProfileImage(image: ByteArray, imageName: String): UploadTask {\n        val imageRef = firebaseStorage.child(\"profileImages\")\n            .child(firebaseAuth.currentUser!!.uid)\n            .child(imageName)\n\n        return imageRef.putBytes(image)\n\n    }\n\n    fun getImageUrl(\n        firstName: String,\n        lastName: String,\n        email: String,\n        imageName: String,\n        onResult: (User?, String?) -> Unit,\n    ) {\n        if (imageName.isNotEmpty())\n            firebaseStorage.child(\"profileImages\")\n                .child(firebaseAuth.currentUser!!.uid)\n                .child(imageName).downloadUrl.addOnCompleteListener {\n                    if (it.isSuccessful) {\n                        val imageUrl = it.result.toString()\n                        val user = User(firstName, lastName, email, imageUrl)\n                        onResult(user, null)\n                    } else\n                        onResult(null, it.exception.toString())\n\n                } else {\n            val user = User(firstName, lastName, email, \"\")\n            onResult(user, null)\n        }\n    }\n\n    fun updateUserInformation(user: User) =\n        Firebase.firestore.runTransaction { transaction ->\n            val userPath = usersCollectionRef.document(Firebase.auth.currentUser!!.uid)\n            if (user.imagePath.isNotEmpty()) {\n                transaction.set(userPath, user)\n            } else {\n                val imagePath = transaction.get(userPath)[\"imagePath\"] as String\n                user.imagePath = imagePath\n                transaction.set(userPath, user)\n            }\n\n        }\n\n\n    fun getUserOrders() = usersCollectionRef\n        .document(FirebaseAuth.getInstance().currentUser!!.uid)\n        .collection(ORDERS)\n        .orderBy(\"date\", Query.Direction.DESCENDING)\n        .get()\n\n    fun resetPassword(email: String) = firebaseAuth.sendPasswordResetEmail(email)\n\n    fun getOrderAddressAndProducts(\n        order: Order,\n        address: (Address?, String?) -> Unit,\n        products: (List<CartProduct>?, String?) -> Unit\n    ) {\n        usersCollectionRef\n            .document(Firebase.auth.currentUser!!.uid).collection(ORDERS)\n            .whereEqualTo(\"id\", order.id)\n            .get().addOnCompleteListener {\n                if (it.isSuccessful) {\n                    val id = it.result?.documents?.get(0)?.id\n                    usersCollectionRef.document(Firebase.auth.currentUser!!.uid)\n                        .collection(ORDERS).document(id!!).collection(ADDRESS_COLLECTION).get()\n                        .addOnCompleteListener { it2 ->\n                            if (it2.isSuccessful) {\n                                val address2 = it2.result?.toObjects(Address::class.java)\n                                Log.d(\"test\", address2!!.size.toString())\n                                address(address2?.get(0), null)\n                            } else\n                                address(null, it2.exception.toString())\n                        }\n\n                    usersCollectionRef.document(Firebase.auth.currentUser!!.uid)\n                        .collection(ORDERS).document(id).collection(PRODUCTS_COLLECTION).get()\n                        .addOnCompleteListener { it2 ->\n                            if (it2.isSuccessful) {\n                                val products2 = it2.result?.toObjects(CartProduct::class.java)\n                                Log.d(\"test\", products2!!.size.toString())\n                                products(products2, null)\n                            } else\n                                products(null, it2.exception.toString())\n                        }\n\n\n                } else {\n                    address(null, it.exception.toString())\n                    products(null, it.exception.toString())\n                }\n            }\n    }\n\n    //true -> already existed account\n    //false -> new account\n    fun checkUserByEmail(email: String, onResult: (String?, Boolean?) -> Unit) {\n        usersCollectionRef.whereEqualTo(\"email\", email).get()\n            .addOnCompleteListener {\n                if (it.isSuccessful) {\n                    val user = it.result.toObjects(User::class.java)\n                    if (user.isEmpty())\n                        onResult(null, false)\n                    else\n                        onResult(null, true)\n                } else\n                    onResult(it.exception.toString(), null)\n            }\n    }\n\n    fun signInWithGoogle(credential: AuthCredential) =\n        FirebaseAuth.getInstance().signInWithCredential(credential)\n\n    fun fetchStore(uid:String) = storesCollection.whereEqualTo(\"uid\",uid).get()\n\n\n\n    fun logout() = Firebase.auth.signOut()\n\n\n\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/firebaseDatabase/FirebaseDb.kt b/app/src/main/java/com/example/kleine/firebaseDatabase/FirebaseDb.kt
+--- a/app/src/main/java/com/example/kleine/firebaseDatabase/FirebaseDb.kt	
++++ b/app/src/main/java/com/example/kleine/firebaseDatabase/FirebaseDb.kt	
+@@ -1,19 +1,18 @@
+ package com.example.kleine.firebaseDatabase
+ 
+ import android.util.Log
++import com.example.kleine.DAO.UserDao
+ import com.example.kleine.model.*
+ import com.example.kleine.util.Constants.Companion.ADDRESS_COLLECTION
+ import com.example.kleine.util.Constants.Companion.BEST_DEALS
+ import com.example.kleine.util.Constants.Companion.CART_COLLECTION
+ import com.example.kleine.util.Constants.Companion.CATEGORIES_COLLECTION
+ import com.example.kleine.util.Constants.Companion.CATEGORY
+-import com.example.kleine.util.Constants.Companion.CHAIR_CATEGORY
+ import com.example.kleine.util.Constants.Companion.CLOTHES
+ import com.example.kleine.util.Constants.Companion.COLOR
+ import com.example.kleine.util.Constants.Companion.CUPBOARD_CATEGORY
+ import com.example.kleine.util.Constants.Companion.ID
+ import com.example.kleine.util.Constants.Companion.ORDERS
+-import com.example.kleine.util.Constants.Companion.ORDER_CONFIRM_STATE
+ import com.example.kleine.util.Constants.Companion.ORDER_PLACED_STATE
+ import com.example.kleine.util.Constants.Companion.PRICE
+ import com.example.kleine.util.Constants.Companion.PRODUCTS_COLLECTION
+@@ -26,18 +25,20 @@
+ import com.google.firebase.auth.AuthCredential
+ import com.google.firebase.auth.FirebaseAuth
+ import com.google.firebase.auth.ktx.auth
++import com.google.firebase.firestore.DocumentReference
+ import com.google.firebase.firestore.DocumentSnapshot
+ import com.google.firebase.firestore.Query
+ import com.google.firebase.firestore.Transaction
+ import com.google.firebase.firestore.ktx.firestore
+ import com.google.firebase.ktx.Firebase
+-import com.google.firebase.storage.FirebaseStorage
+ import com.google.firebase.storage.UploadTask
+ import com.google.firebase.storage.ktx.storage
++import kotlinx.coroutines.CoroutineScope
++import kotlinx.coroutines.Dispatchers
++import kotlinx.coroutines.launch
+ import java.util.*
+ import kotlin.collections.ArrayList
+ import kotlin.collections.HashMap
+-import kotlin.random.Random
+ 
+ class FirebaseDb {
+     private val usersCollectionRef = Firebase.firestore.collection(USERS_COLLECTION)
+@@ -46,19 +47,37 @@
+     private val storesCollection = Firebase.firestore.collection(STORES_COLLECTION)
+     private val firebaseStorage = Firebase.storage.reference
+ 
+-    val userUid = FirebaseAuth.getInstance().currentUser?.uid
+-
+-    private val userCartCollection = userUid?.let {
+-        Firebase.firestore.collection(USERS_COLLECTION).document(it).collection(CART_COLLECTION)
+-    }
+-    private val userAddressesCollection = userUid?.let {
+-        Firebase.firestore.collection(USERS_COLLECTION).document(it).collection(ADDRESS_COLLECTION)
+-
++
++    // Lazy initialization of userCartCollection and userAddressesCollection
++    private val userCartCollection by lazy {
++        val userUid = FirebaseAuth.getInstance().currentUser?.uid
++        if (userUid != null) {
++            Firebase.firestore.collection(USERS_COLLECTION).document(userUid).collection(CART_COLLECTION)
++        } else {
++            null
++        }
++    }
++
++    private val userAddressesCollection by lazy {
++        val userUid = FirebaseAuth.getInstance().currentUser?.uid
++        if (userUid != null) {
++            Firebase.firestore.collection(USERS_COLLECTION).document(userUid).collection(ADDRESS_COLLECTION)
++        } else {
++            null
++        }
+     }
+-
+ 
+     private val firebaseAuth = Firebase.auth
+ 
++    fun getItemsInCart() = userCartCollection
++
++
++
++
++    val userUid = FirebaseAuth.getInstance().currentUser?.uid
++
++
++
+     fun getProductsByCategory(category: String,page:Long) =
+         productsCollection.whereEqualTo(CATEGORY,category).limit(page).get()
+ 
+@@ -122,7 +141,7 @@
+ 
+     }
+ 
+-    fun getItemsInCart() = userCartCollection!!
++
+ 
+     fun decreaseProductQuantity(documentId: String): Task<Transaction> {
+         val document = userCartCollection!!.document(documentId)
+@@ -265,19 +284,45 @@
+         }
+ 
+     private fun deleteCartItems() {
+-        userCartCollection?.get()?.addOnSuccessListener {
+-            Firebase.firestore.runBatch { batch ->
+-                it.documents.forEach {
+-                    val document = userCartCollection.document(it.id)
+-                    batch.delete(document)
++        userCartCollection?.get()?.addOnCompleteListener { task ->
++            if (task.isSuccessful) {
++                val documents = task.result?.documents
++                if (documents != null && documents.isNotEmpty()) {
++                    Firebase.firestore.runBatch { batch ->
++                        documents.forEach { documentSnapshot ->
++                            val document = userCartCollection!!.document(documentSnapshot.id)
++                            batch.delete(document)
++                        }
++                    }.addOnCompleteListener { batchTask ->
++                        if (!batchTask.isSuccessful) {
++                            // Handle batch failure here
++                            Log.e("FirebaseDb", "Batch delete failed: ${batchTask.exception?.message}")
++                        }
++                    }
++                } else {
++                    // Handle the case when there are no documents to delete
++                    Log.e("FirebaseDb", "No documents to delete")
+                 }
++            } else {
++                // Handle failure to fetch documents here
++                Log.e("FirebaseDb", "Fetch documents failed: ${task.exception?.message}")
+             }
+         }
+     }
+ 
+ 
+-    fun getUser() = usersCollectionRef
+-        .document(FirebaseAuth.getInstance().currentUser!!.uid)
++
++    fun getUser(): DocumentReference? {
++        val currentUser = FirebaseAuth.getInstance().currentUser
++        return if (currentUser != null) {
++            usersCollectionRef.document(currentUser.uid)
++        } else {
++            null
++        }
++    }
++
++
++
+ 
+ 
+     fun uploadUserProfileImage(image: ByteArray, imageName: String): UploadTask {
+@@ -296,23 +341,27 @@
+         imageName: String,
+         onResult: (User?, String?) -> Unit,
+     ) {
+-        if (imageName.isNotEmpty())
++        if (imageName.isNotEmpty()) {
+             firebaseStorage.child("profileImages")
+                 .child(firebaseAuth.currentUser!!.uid)
+                 .child(imageName).downloadUrl.addOnCompleteListener {
+                     if (it.isSuccessful) {
+                         val imageUrl = it.result.toString()
+-                        val user = User(firstName, lastName, email, imageUrl)
++                        // Added an empty string as the password parameter
++                        val user = User(0, firstName, lastName, email, "", imageUrl, Status.USERS)
+                         onResult(user, null)
+-                    } else
++                    } else {
+                         onResult(null, it.exception.toString())
+-
+-                } else {
+-            val user = User(firstName, lastName, email, "")
++                    }
++                }
++        } else {
++            // Added an empty string as the password parameter
++            val user = User(0, firstName, lastName, email, "", "", Status.USERS)
+             onResult(user, null)
+         }
+     }
+ 
++
+     fun updateUserInformation(user: User) =
+         Firebase.firestore.runTransaction { transaction ->
+             val userPath = usersCollectionRef.document(Firebase.auth.currentUser!!.uid)
+@@ -376,6 +425,15 @@
+             }
+     }
+ 
++    fun saveUserToLocalDatabase(user: User, dao: UserDao) {
++        CoroutineScope(Dispatchers.IO).launch {
++            // Assume dao is an instance of a Room DAO interface for User
++            dao.insertUser(user)
++        }
++    }
++
++
++
+     //true -> already existed account
+     //false -> new account
+     fun checkUserByEmail(email: String, onResult: (String?, Boolean?) -> Unit) {
+Index: app/src/main/java/com/example/kleine/viewmodel/shopping/ShoppingViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.kleine.viewmodel.shopping\n\nimport android.util.Log\nimport androidx.lifecycle.MutableLiveData\nimport androidx.lifecycle.ViewModel\nimport com.example.kleine.firebaseDatabase.FirebaseDb\nimport com.example.kleine.model.*\nimport com.example.kleine.resource.Resource\nimport com.example.kleine.util.Constants.Companion.ACCESSORY_CATEGORY\nimport com.example.kleine.util.Constants.Companion.CHAIR_CATEGORY\nimport com.example.kleine.util.Constants.Companion.CUPBOARD_CATEGORY\nimport com.example.kleine.util.Constants.Companion.FURNITURE_CATEGORY\nimport com.example.kleine.util.Constants.Companion.TABLES_CATEGORY\nimport com.google.firebase.firestore.FirebaseFirestore\nimport java.util.*\n\nprivate const val TAG = \"ShoppingViewModel\"\n\nclass ShoppingViewModel(\n    private val firebaseDatabase: FirebaseDb\n) : ViewModel() {\n\n    val clothes = MutableLiveData<List<Product>>()\n    val emptyClothes = MutableLiveData<Boolean>()\n    val bestDeals = MutableLiveData<List<Product>>()\n    val emptyBestDeals = MutableLiveData<Boolean>()\n\n    val home = MutableLiveData<Resource<List<Product>>>()\n\n    val chairs = MutableLiveData<Resource<List<Product>>>()\n    val mostRequestedChairs = MutableLiveData<Resource<List<Product>>>()\n\n    val tables = MutableLiveData<Resource<List<Product>>>()\n    val mostRequestedTables = MutableLiveData<Resource<List<Product>>>()\n\n    val accessory = MutableLiveData<Resource<List<Product>>>()\n    val mostRequestedAccessories = MutableLiveData<Resource<List<Product>>>()\n\n    val furniture = MutableLiveData<Resource<List<Product>>>()\n    val mostRequestedFurniture = MutableLiveData<Resource<List<Product>>>()\n\n    val mostRequestedCupboard = MutableLiveData<Resource<List<Product>>>()\n    val cupboard = MutableLiveData<Resource<List<Product>>>()\n    val addToCart = MutableLiveData<Resource<Boolean>>()\n\n    val addAddress = MutableLiveData<Resource<Address>>()\n    val updateAddress = MutableLiveData<Resource<Address>>()\n    val deleteAddress = MutableLiveData<Resource<Address>>()\n\n    val profile = MutableLiveData<Resource<User>>()\n\n    val uploadProfileImage = MutableLiveData<Resource<String>>()\n    val updateUserInformation = MutableLiveData<Resource<User>>()\n\n    val userOrders = MutableLiveData<Resource<List<Order>>>()\n\n    val passwordReset = MutableLiveData<Resource<String>>()\n\n    val orderAddress = MutableLiveData<Resource<Address>>()\n    val orderProducts = MutableLiveData<Resource<List<CartProduct>>>()\n\n    val categories = MutableLiveData<Resource<List<Category>>>()\n\n\n    val search = MutableLiveData<Resource<List<Product>>>()\n\n    private var homePage: Long = 10\n    private var clothesPaging: Long = 5\n    private var bestDealsPaging: Long = 5\n\n    private var cupboardPaging: Long = 4\n    private var mostOrderCupboardPaging: Long = 5\n\n    private var mostRequestedChairsPage: Long = 3\n    private var chairsPage: Long = 4\n\n    private var mostRequestedTablePage: Long = 3\n    private var tablePage: Long = 4\n\n    private var mostRequestedAccessoryPage: Long = 3\n    private var accessoryPage: Long = 4\n\n    private var mostRequestedFurniturePage: Long = 3\n    private var furniturePage: Long = 4\n\n\n    init {\n        getClothesProducts()\n        getBestDealsProduct()\n        getHomeProduct()\n    }\n\n    private var furnitureProducts: List<Product>? = null\n    fun getFurniture(size: Int = 0) {\n        if (furnitureProducts != null && size == 0) {\n            furniture.postValue(Resource.Success(furnitureProducts))\n            return\n        }\n        furniture.postValue(Resource.Loading())\n        shouldPaging(FURNITURE_CATEGORY, size) { shouldPaging ->\n            if (shouldPaging) {\n                tables.postValue(Resource.Loading())\n                firebaseDatabase.getProductsByCategory(FURNITURE_CATEGORY, furniturePage)\n                    .addOnCompleteListener {\n                        if (it.isSuccessful) {\n                            val documents = it.result\n                            if (!documents!!.isEmpty) {\n                                val productsList = documents.toObjects(Product::class.java)\n                                furnitureProducts = productsList\n                                furniture.postValue(Resource.Success(productsList))\n                                furniturePage += 4\n\n                            }\n                        } else\n                            furniture.postValue(Resource.Error(it.exception.toString()))\n                    }\n            } else\n                furniture.postValue(Resource.Error(\"Cannot paging\"))\n\n        }\n    }\n\n    private var mostRequestedFurnitureProducts: List<Product>? = null\n    fun getMostRequestedFurniture(size: Int = 0) {\n        if (mostRequestedFurnitureProducts != null && size == 0) {\n            mostRequestedFurniture.postValue(Resource.Success(mostRequestedFurnitureProducts))\n            return\n        }\n        mostRequestedFurniture.postValue(Resource.Loading())\n        shouldPaging(FURNITURE_CATEGORY, size) { shouldPaging ->\n            if (shouldPaging) {\n                mostRequestedFurniture.postValue(Resource.Loading())\n                firebaseDatabase.getProductsByCategory(\n                    FURNITURE_CATEGORY,\n                    mostRequestedFurniturePage\n                )\n                    .addOnCompleteListener {\n                        if (it.isSuccessful) {\n                            val documents = it.result\n                            if (!documents!!.isEmpty) {\n                                val productsList = documents.toObjects(Product::class.java)\n                                mostRequestedFurnitureProducts = productsList\n                                mostRequestedFurniture.postValue(Resource.Success(productsList))\n                                mostRequestedFurniturePage += 4\n\n                            }\n                        } else\n                            mostRequestedFurniture.postValue(Resource.Error(it.exception.toString()))\n                    }\n            } else\n                mostRequestedFurniture.postValue(Resource.Error(\"Cannot paging\"))\n        }\n    }\n\n    private var accessoriesProducts: List<Product>? = null\n    fun getAccessories(size: Int = 0) {\n        if (accessoriesProducts != null && size == 0) {\n            accessory.postValue(Resource.Success(accessoriesProducts))\n            return\n        }\n        accessory.postValue(Resource.Loading())\n        shouldPaging(ACCESSORY_CATEGORY, size) { shouldPaging ->\n            if (shouldPaging) {\n                Log.d(\"test\", \"paging\")\n                firebaseDatabase.getProductsByCategory(ACCESSORY_CATEGORY, accessoryPage)\n                    .addOnCompleteListener {\n                        if (it.isSuccessful) {\n                            val documents = it.result\n                            if (!documents!!.isEmpty) {\n                                val productsList = documents.toObjects(Product::class.java)\n                                accessory.postValue(Resource.Success(productsList))\n                                accessoriesProducts = productsList\n                                accessoryPage += 4\n\n                            }\n                        } else\n                            accessory.postValue(Resource.Error(it.exception.toString()))\n                    }\n            } else {\n                accessory.postValue(Resource.Error(\"Cannot page\"))\n            }\n        }\n    }\n\n    private var mostRequestedAccessoriesProducts: List<Product>? = null\n    fun getMostRequestedAccessories(size: Int = 0) {\n        if (mostRequestedAccessoriesProducts != null && size == 0) {\n            mostRequestedAccessories.postValue(Resource.Success(mostRequestedAccessoriesProducts))\n            return\n        }\n        mostRequestedAccessories.postValue(Resource.Loading())\n        shouldPaging(ACCESSORY_CATEGORY, size) { shouldPaging ->\n            if (shouldPaging) {\n                chairs.postValue(Resource.Loading())\n                firebaseDatabase.getProductsByCategory(\n                    ACCESSORY_CATEGORY,\n                    mostRequestedAccessoryPage\n                )\n                    .addOnCompleteListener {\n                        if (it.isSuccessful) {\n                            val documents = it.result\n                            if (!documents!!.isEmpty) {\n                                val productsList = documents.toObjects(Product::class.java)\n                                mostRequestedAccessories.postValue(Resource.Success(productsList))\n                                mostRequestedAccessoriesProducts = productsList\n                                mostRequestedAccessoryPage += 4\n\n                            }\n                        } else\n                            mostRequestedAccessories.postValue(Resource.Error(it.exception.toString()))\n                    }\n            } else\n                mostRequestedAccessories.postValue(Resource.Error(\"Cannot paging\"))\n        }\n    }\n\n    private var chairsProducts: List<Product>? = null\n    fun getChairs(size: Int = 0) {\n        if (chairsProducts != null && size == 0) {\n            chairs.postValue(Resource.Success(chairsProducts))\n            return\n        }\n        chairs.postValue(Resource.Loading())\n        shouldPaging(CUPBOARD_CATEGORY, size) { shouldPaging ->\n            if (shouldPaging) {\n\n                chairs.postValue(Resource.Loading())\n                firebaseDatabase.getProductsByCategory(CHAIR_CATEGORY, chairsPage)\n                    .addOnCompleteListener {\n                        if (it.isSuccessful) {\n                            val documents = it.result\n                            if (!documents!!.isEmpty) {\n                                val productsList = documents.toObjects(Product::class.java)\n                                chairsProducts = productsList\n                                chairs.postValue(Resource.Success(productsList))\n                                chairsPage += 4\n\n                            }\n                        } else\n                            chairs.postValue(Resource.Error(it.exception.toString()))\n                    }\n            } else\n                chairs.postValue(Resource.Error(\"Cannot paging\"))\n        }\n    }\n\n    private var mostRequestedChairsProducts: List<Product>? = null\n    fun getMostRequestedChairs(size: Int = 0) {\n        if (mostRequestedChairsProducts != null && size == 0) {\n            mostRequestedChairs.postValue(Resource.Success(chairsProducts))\n            return\n        }\n        mostRequestedChairs.postValue(Resource.Loading())\n        shouldPaging(CUPBOARD_CATEGORY, size) { shouldPaging ->\n            if (shouldPaging) {\n                chairs.postValue(Resource.Loading())\n                firebaseDatabase.getProductsByCategory(CHAIR_CATEGORY, mostRequestedChairsPage)\n                    .addOnCompleteListener {\n                        if (it.isSuccessful) {\n                            val documents = it.result\n                            if (!documents!!.isEmpty) {\n                                val productsList = documents.toObjects(Product::class.java)\n                                mostRequestedChairsProducts = productsList\n                                mostRequestedChairs.postValue(Resource.Success(productsList))\n                                mostRequestedChairsPage += 4\n\n                            }\n                        } else\n                            mostRequestedChairs.postValue(Resource.Error(it.exception.toString()))\n                    }\n            } else\n                chairs.postValue(Resource.Error(\"Cannot paging\"))\n        }\n    }\n\n    private var tablesProducts: List<Product>? = null\n    fun getTables(size: Int = 0) {\n        if (tablesProducts != null && size == 0) {\n            tables.postValue(Resource.Success(tablesProducts))\n            return\n        }\n        tables.postValue(Resource.Loading())\n        shouldPaging(TABLES_CATEGORY, size) { shouldPaging ->\n            if (shouldPaging) {\n                tables.postValue(Resource.Loading())\n                firebaseDatabase.getProductsByCategory(TABLES_CATEGORY, tablePage)\n                    .addOnCompleteListener {\n                        if (it.isSuccessful) {\n                            val documents = it.result\n                            if (!documents!!.isEmpty) {\n                                val productsList = documents.toObjects(Product::class.java)\n                                tablesProducts = productsList\n                                tables.postValue(Resource.Success(productsList))\n                                tablePage += 4\n\n                            }\n                        } else\n                            tables.postValue(Resource.Error(it.exception.toString()))\n                    }\n            } else\n                home.postValue(Resource.Error(\"Cannot paging\"))\n        }\n    }\n\n    private var mostRequestedTablesProducts: List<Product>? = null\n    fun getMostRequestedTables(size: Int = 0) {\n        if (mostRequestedTablesProducts != null && size == 0) {\n            tables.postValue(Resource.Success(mostRequestedTablesProducts))\n            return\n        }\n        mostRequestedTables.postValue(Resource.Loading())\n        shouldPaging(TABLES_CATEGORY, size) { shouldPaging ->\n            if (shouldPaging) {\n                mostRequestedTables.postValue(Resource.Loading())\n                firebaseDatabase.getProductsByCategory(TABLES_CATEGORY, mostRequestedTablePage)\n                    .addOnCompleteListener {\n                        if (it.isSuccessful) {\n                            val documents = it.result\n                            if (!documents!!.isEmpty) {\n                                val productsList = documents.toObjects(Product::class.java)\n                                mostRequestedTablesProducts = productsList\n                                mostRequestedTables.postValue(Resource.Success(productsList))\n                                mostRequestedTablePage += 3\n\n                            }\n                        } else\n                            mostRequestedTables.postValue(Resource.Error(it.exception.toString()))\n                    }\n            } else\n                mostRequestedTables.postValue(Resource.Error(\"Cannot paging\"))\n        }\n    }\n\n\n    fun getClothesProducts() =\n        firebaseDatabase.getClothesProducts(clothesPaging).addOnCompleteListener {\n            if (it.isSuccessful) {\n                val documents = it.result\n                if (!documents!!.isEmpty) {\n                    val productsList = documents.toObjects(Product::class.java)\n                    clothes.postValue(productsList)\n                    clothesPaging += 5\n                } else\n                    emptyClothes.postValue(true)\n\n            } else\n                Log.e(TAG, it.exception.toString())\n\n        }\n\n    fun getBestDealsProduct() =\n        firebaseDatabase.getBestDealsProducts(bestDealsPaging).addOnCompleteListener {\n            if (it.isSuccessful) {\n                val documents = it.result\n                if (!documents!!.isEmpty) {\n                    val productsList = documents.toObjects(Product::class.java)\n                    bestDeals.postValue(productsList)\n                    bestDealsPaging += 5\n                } else\n                    emptyBestDeals.postValue(true)\n\n            } else\n                Log.e(TAG, it.exception.toString())\n        }\n\n    fun getHomeProduct(size: Int = 0) {\n        home.postValue(Resource.Loading())\n        shouldPagingHome(size)\n        { shouldPaging ->\n            if (shouldPaging) {\n                home.postValue(Resource.Loading())\n                firebaseDatabase.getHomeProducts(homePage)\n                    .addOnCompleteListener {\n                        if (it.isSuccessful) {\n                            val documents = it.result\n                            if (!documents!!.isEmpty) {\n                                val productsList = documents.toObjects(Product::class.java)\n                                home.postValue(Resource.Success(productsList))\n                                homePage += 4\n\n                            }\n                        } else\n                            home.postValue(Resource.Error(it.exception.toString()))\n                    }\n            } else\n                home.postValue(Resource.Error(\"Cannot paging\"))\n        }\n    }\n\n    private var mostRequestedCupboardProducts: List<Product>? = null\n    fun getMostRequestedCupboards(size: Int = 0) {\n        if (mostRequestedCupboardProducts != null && size == 0) {\n            mostRequestedCupboard.postValue(Resource.Success(mostRequestedCupboardProducts))\n            return\n        }\n\n        mostRequestedCupboard.postValue(Resource.Loading())\n        shouldPaging(CUPBOARD_CATEGORY, size) { shouldPaging ->\n            if (shouldPaging) {\n                mostRequestedCupboard.postValue(Resource.Loading())\n                firebaseDatabase.getMostOrderedCupboard(mostOrderCupboardPaging)\n                    .addOnCompleteListener {\n                        if (it.isSuccessful) {\n                            val documents = it.result\n                            if (!documents!!.isEmpty) {\n                                val productsList = documents.toObjects(Product::class.java)\n                                mostRequestedCupboardProducts = productsList\n                                mostRequestedCupboard.postValue(Resource.Success(productsList))\n                                mostOrderCupboardPaging += 5\n\n                            }\n                        } else\n                            mostRequestedCupboard.postValue(Resource.Error(it.exception.toString()))\n                    }\n\n\n            } else\n                mostRequestedCupboard.postValue(Resource.Error(\"Cannot paging\"))\n        }\n    }\n\n    private var dCupboardProducts: List<Product>? = null\n    fun getCupboardProduct(size: Int = 0) {\n        if (dCupboardProducts != null && size == 0) {\n            cupboard.postValue(Resource.Success(dCupboardProducts))\n            return\n        }\n        shouldPaging(CUPBOARD_CATEGORY, size) { shouldPaging ->\n            if (shouldPaging) {\n                cupboard.postValue(Resource.Loading())\n                firebaseDatabase.getCupboards(cupboardPaging).addOnCompleteListener {\n                    if (it.isSuccessful) {\n\n                        val documents = it.result\n                        if (!documents!!.isEmpty) {\n                            val productsList = documents.toObjects(Product::class.java)\n                            dCupboardProducts = productsList\n                            cupboard.postValue(Resource.Success(productsList))\n                            cupboardPaging += 10\n                        }\n\n                    } else\n                        cupboard.postValue(Resource.Error(it.exception.toString()))\n                }\n            } else\n                cupboard.postValue(Resource.Error(\"Cannot paging\"))\n        }\n    }\n\n    /*\n    * TODO : Move these functions to firebaseDatabase class\n     */\n\n    private fun shouldPaging(category: String, listSize: Int, onSuccess: (Boolean) -> Unit) {\n        FirebaseFirestore.getInstance()\n            .collection(\"categories\")\n            .whereEqualTo(\"name\", category).get().addOnSuccessListener {\n                val tempCategory = it.toObjects(Category::class.java)\n                val products = tempCategory[0].products\n                Log.d(\"test\", \" $category : prodcuts ${tempCategory[0].products}, size $listSize\")\n                if (listSize == products)\n                    onSuccess(false).also { Log.d(TAG, \"$category Paging:false\") }\n                else\n                    onSuccess(true).also { Log.d(TAG, \"$category Paging:true\") }\n            }\n    }\n\n    private fun shouldPagingHome(listSize: Int, onSuccess: (Boolean) -> Unit) {\n        FirebaseFirestore.getInstance()\n            .collection(\"categories\").get().addOnSuccessListener {\n                var productsCount = 0\n                it.toObjects(Category::class.java).forEach { category ->\n                    productsCount += category.products!!.toInt()\n                }\n\n                if (listSize == productsCount)\n                    onSuccess(false)\n                else\n                    onSuccess(true)\n\n            }\n    }\n\n\n    private fun checkIfProductAlreadyAdded(\n        product: CartProduct,\n        onSuccess: (Boolean, String) -> Unit\n    ) {\n        addToCart.postValue(Resource.Loading())\n        firebaseDatabase.getProductInCart(product).addOnCompleteListener {\n            if (it.isSuccessful) {\n                val documents = it.result!!.documents\n                if (documents.isNotEmpty())\n                    onSuccess(true, documents[0].id) // true ---> product is already in cart\n                else\n                    onSuccess(false, \"\") // false ---> product is not in cart\n            } else\n                addToCart.postValue(Resource.Error(it.exception.toString()))\n\n        }\n    }\n\n\n    fun addProductToCart(product: CartProduct) =\n        checkIfProductAlreadyAdded(product) { isAdded, id ->\n            if (isAdded) {\n                firebaseDatabase.increaseProductQuantity(id).addOnCompleteListener {\n                    if (it.isSuccessful)\n                        addToCart.postValue(Resource.Success(true))\n                    else\n                        addToCart.postValue(Resource.Error(it.exception!!.message))\n\n                }\n            } else {\n                firebaseDatabase.addProductToCart(product).addOnCompleteListener {\n                    if (it.isSuccessful)\n                        addToCart.postValue(Resource.Success(true))\n                    else\n                        addToCart.postValue(Resource.Error(it.exception!!.message))\n                }\n            }\n        }\n\n\n    fun saveAddress(address: Address) {\n        addAddress.postValue(Resource.Loading())\n        firebaseDatabase.saveNewAddress(address)?.addOnCompleteListener {\n            if (it.isSuccessful)\n                addAddress.postValue(Resource.Success(address))\n            else\n                addAddress.postValue(Resource.Error(it.exception.toString()))\n        }\n    }\n\n    fun updateAddress(oldAddress: Address, newAddress: Address) {\n        updateAddress.postValue(Resource.Loading())\n        firebaseDatabase.findAddress(oldAddress).addOnCompleteListener { addressResponse ->\n            if (addressResponse.isSuccessful) {\n                val documentUid = addressResponse.result!!.documents[0].id\n                firebaseDatabase.updateAddress(documentUid, newAddress)?.addOnCompleteListener {\n                    if (it.isSuccessful)\n                        updateAddress.postValue(Resource.Success(newAddress))\n                    else\n                        updateAddress.postValue(Resource.Error(it.exception.toString()))\n\n                }\n\n            } else\n                updateAddress.postValue(Resource.Error(addressResponse.exception.toString()))\n\n        }\n    }\n\n    fun deleteAddress(address: Address) {\n        deleteAddress.postValue(Resource.Loading())\n        firebaseDatabase.findAddress(address).addOnCompleteListener { addressResponse ->\n            if (addressResponse.isSuccessful) {\n                val documentUid = addressResponse.result!!.documents[0].id\n                firebaseDatabase.deleteAddress(documentUid, address)?.addOnCompleteListener {\n                    if (it.isSuccessful)\n                        deleteAddress.postValue(Resource.Success(address))\n                    else\n                        deleteAddress.postValue(Resource.Error(it.exception.toString()))\n\n                }\n\n            } else\n                deleteAddress.postValue(Resource.Error(addressResponse.exception.toString()))\n\n        }\n    }\n\n    private val user: User? = null\n    fun getUser() {\n        if (user != null) {\n            profile.postValue(Resource.Success(user))\n            return\n        }\n\n        profile.postValue(Resource.Loading())\n        firebaseDatabase.getUser().addSnapshotListener { value, error ->\n            if (error != null)\n                profile.postValue(Resource.Error(error.message))\n            else\n                profile.postValue(Resource.Success(value?.toObject(User::class.java)))\n\n        }\n    }\n\n    fun uploadProfileImage(image: ByteArray) {\n        Log.d(\"ViewModel\", \"Image byte array size: ${image.size}\")\n        uploadProfileImage.postValue(Resource.Loading())\n        val name = UUID.nameUUIDFromBytes(image).toString()\n        Log.d(\"ViewModel\", \"Generated UUID: $name\")\n\n        firebaseDatabase.uploadUserProfileImage(image, name).addOnCompleteListener {\n            if (it.isSuccessful) {\n                Log.d(\"ViewModel\", \"Upload successful with name: $name\")\n                uploadProfileImage.postValue(Resource.Success(name))\n            } else {\n                Log.e(\"ViewModel\", \"Upload failed: ${it.exception}\")\n                uploadProfileImage.postValue(Resource.Error(it.exception.toString()))\n            }\n        }\n    }\n\n\n    fun updateInformation(firstName: String, lastName: String, email: String, imageName: String) {\n        updateUserInformation.postValue(Resource.Loading())\n\n        firebaseDatabase.getImageUrl(firstName, lastName, email, imageName) { user, exception ->\n\n            if (exception != null)\n                updateUserInformation.postValue(Resource.Error(exception))\n                    .also { Log.d(\"test1\", \"up\") }\n            else\n                user?.let {\n                    onUpdateInformation(user).also { Log.d(\"test1\", \"down\") }\n                }\n        }\n    }\n\n    private fun onUpdateInformation(user: User) {\n        firebaseDatabase.updateUserInformation(user).addOnCompleteListener {\n            if (it.isSuccessful)\n                updateUserInformation.postValue(Resource.Success(user))\n            else\n                updateUserInformation.postValue(Resource.Error(it.exception.toString()))\n\n        }\n    }\n\n    fun getUserOrders() {\n        userOrders.postValue(Resource.Loading())\n        firebaseDatabase.getUserOrders().addOnCompleteListener {\n            if (it.isSuccessful)\n                userOrders.postValue(Resource.Success(it.result?.toObjects(Order::class.java)))\n            else\n                userOrders.postValue(Resource.Error(it.exception.toString()))\n        }\n    }\n\n    fun resetPassword(email: String) {\n        passwordReset.postValue(Resource.Loading())\n        firebaseDatabase.resetPassword(email).addOnCompleteListener {\n            if (it.isSuccessful)\n                passwordReset.postValue(Resource.Success(email))\n            else\n                passwordReset.postValue(Resource.Error(it.exception.toString()))\n        }\n    }\n\n    fun getOrderAddressAndProducts(order: Order) {\n        orderAddress.postValue(Resource.Loading())\n        orderProducts.postValue(Resource.Loading())\n        firebaseDatabase.getOrderAddressAndProducts(order, { address, aError ->\n            if (aError != null)\n                orderAddress.postValue(Resource.Error(aError))\n            else\n                orderAddress.postValue(Resource.Success(address))\n        }, { products, pError ->\n\n            if (pError != null)\n                orderProducts.postValue(Resource.Error(pError))\n            else\n                orderProducts.postValue(Resource.Success(products))\n\n        })\n    }\n\n    fun searchProducts(searchQuery: String) {\n        search.postValue(Resource.Loading())\n        firebaseDatabase.searchProducts(searchQuery).addOnCompleteListener {\n            if (it.isSuccessful) {\n                val productsList = it.result!!.toObjects(Product::class.java)\n                search.postValue(Resource.Success(productsList))\n\n            } else\n                search.postValue(Resource.Error(it.exception.toString()))\n\n        }\n    }\n\n    private var categoriesSafe: List<Category>? = null\n    fun getCategories() {\n        if(categoriesSafe != null){\n            categories.postValue(Resource.Success(categoriesSafe))\n            return\n        }\n        categories.postValue(Resource.Loading())\n        firebaseDatabase.getCategories().addOnCompleteListener {\n            if (it.isSuccessful) {\n                val categoriesList = it.result!!.toObjects(Category::class.java)\n                categoriesSafe = categoriesList\n                categories.postValue(Resource.Success(categoriesList))\n            } else\n                categories.postValue(Resource.Error(it.exception.toString()))\n        }\n\n\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/viewmodel/shopping/ShoppingViewModel.kt b/app/src/main/java/com/example/kleine/viewmodel/shopping/ShoppingViewModel.kt
+--- a/app/src/main/java/com/example/kleine/viewmodel/shopping/ShoppingViewModel.kt	
++++ b/app/src/main/java/com/example/kleine/viewmodel/shopping/ShoppingViewModel.kt	
+@@ -1,8 +1,10 @@
+ package com.example.kleine.viewmodel.shopping
+ 
+ import android.util.Log
++import androidx.lifecycle.LiveData
+ import androidx.lifecycle.MutableLiveData
+ import androidx.lifecycle.ViewModel
++import androidx.lifecycle.viewModelScope
+ import com.example.kleine.firebaseDatabase.FirebaseDb
+ import com.example.kleine.model.*
+ import com.example.kleine.resource.Resource
+@@ -11,19 +13,31 @@
+ import com.example.kleine.util.Constants.Companion.CUPBOARD_CATEGORY
+ import com.example.kleine.util.Constants.Companion.FURNITURE_CATEGORY
+ import com.example.kleine.util.Constants.Companion.TABLES_CATEGORY
++import com.example.kleine.util.NetworkChecker
++import com.example.kleine.viewmodel.lunchapp.AppDatabase
++import com.google.firebase.auth.FirebaseAuth
+ import com.google.firebase.firestore.FirebaseFirestore
++import kotlinx.coroutines.launch
+ import java.util.*
+ 
+ private const val TAG = "ShoppingViewModel"
+ 
+ class ShoppingViewModel(
+-    private val firebaseDatabase: FirebaseDb
++    private val firebaseDatabase: FirebaseDb,
++    private val appDatabase: AppDatabase,
++    private val networkChecker: NetworkChecker
++
++
+ ) : ViewModel() {
+ 
+     val clothes = MutableLiveData<List<Product>>()
+     val emptyClothes = MutableLiveData<Boolean>()
+     val bestDeals = MutableLiveData<List<Product>>()
+     val emptyBestDeals = MutableLiveData<Boolean>()
++    val firebaseProfile = MutableLiveData<Resource<User>>()
++    private val userDao = appDatabase.userDao()
++
++//    val roomProfile = MutableLiveData<User>()
+ 
+     val home = MutableLiveData<Resource<List<Product>>>()
+ 
+@@ -49,6 +63,7 @@
+ 
+     val profile = MutableLiveData<Resource<User>>()
+ 
++
+     val uploadProfileImage = MutableLiveData<Resource<String>>()
+     val updateUserInformation = MutableLiveData<Resource<User>>()
+ 
+@@ -90,6 +105,8 @@
+         getHomeProduct()
+     }
+ 
++
++
+     private var furnitureProducts: List<Product>? = null
+     fun getFurniture(size: Int = 0) {
+         if (furnitureProducts != null && size == 0) {
+@@ -570,22 +587,58 @@
+         }
+     }
+ 
+-    private val user: User? = null
++
+     fun getUser() {
+-        if (user != null) {
+-            profile.postValue(Resource.Success(user))
+-            return
++        viewModelScope.launch {
++            if (networkChecker.isNetworkConnected()) {
++                // Fetch from Firebase
++                val userDocRef = firebaseDatabase.getUser()
++                userDocRef?.get()?.addOnSuccessListener { documentSnapshot ->
++                    viewModelScope.launch {
++                        if (documentSnapshot != null && documentSnapshot.exists()) {
++                            val user = documentSnapshot.toObject(User::class.java)
++                            if (user != null) {
++                                profile.value = Resource.Success(user)
++                                insertUserToDb(user)  // Call a suspend function
++                            } else {
++                                profile.value = Resource.Error("User not found in Firebase")
++                            }
++                        } else {
++                            profile.value = Resource.Error("User not found in Firebase")
++                        }
++                    }
++                }?.addOnFailureListener { e ->
++                    profile.value = Resource.Error(e.message)
++                }
++            } else {
++                // Fetch from Room DB
++                val user = getUserFromDb()  // Call a suspend function
++                if (user != null) {
++                    profile.value = Resource.Success(user)
++                } else {
++                    profile.value = Resource.Error("User not found in Room DB")
++                }
++            }
+         }
++    }
+ 
+-        profile.postValue(Resource.Loading())
+-        firebaseDatabase.getUser().addSnapshotListener { value, error ->
+-            if (error != null)
+-                profile.postValue(Resource.Error(error.message))
+-            else
+-                profile.postValue(Resource.Success(value?.toObject(User::class.java)))
+ 
+-        }
++    // Helper suspend function to insert user into Room DB
++    private suspend fun insertUserToDb(user: User) {
++        appDatabase.userDao().insertUser(user)
++    }
++
++    // Helper suspend function to get user from Room DB
++    private suspend fun getUserFromDb(): User? {
++        // Replace with appropriate parameters
++        return appDatabase.userDao().getUser("email@example.com", "password")
+     }
++
++
++
++
++
++
+ 
+     fun uploadProfileImage(image: ByteArray) {
+         Log.d("ViewModel", "Image byte array size: ${image.size}")
+Index: app/src/main/java/com/example/kleine/fragments/shopping/ProfileFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.kleine.fragments.shopping\n\nimport android.content.Intent\nimport android.os.Bundle\nimport android.util.Log\nimport androidx.fragment.app.Fragment\nimport android.view.LayoutInflater\nimport android.view.View\nimport android.view.ViewGroup\nimport android.widget.Toast\nimport androidx.coordinatorlayout.widget.CoordinatorLayout\nimport androidx.navigation.fragment.findNavController\nimport com.bumptech.glide.Glide\nimport com.example.kleine.BuildConfig\nimport com.example.kleine.R\nimport com.example.kleine.activities.LunchActivity\nimport com.example.kleine.activities.ShoppingActivity\nimport com.example.kleine.databinding.FragmentProfileBinding\nimport com.example.kleine.model.User\nimport com.example.kleine.resource.Resource\nimport com.example.kleine.util.Constants.Companion.UPDATE_ADDRESS_FLAG\nimport com.example.kleine.viewmodel.shopping.ShoppingViewModel\nimport com.google.android.material.bottomnavigation.BottomNavigationView\nimport com.google.android.material.snackbar.Snackbar\nimport com.google.firebase.auth.FirebaseAuth\n\n\nclass ProfileFragment : Fragment() {\n    val TAG = \"ProfileFragment\"\n    private lateinit var binding: FragmentProfileBinding\n    private lateinit var viewModel: ShoppingViewModel\n\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n\n        viewModel = (activity as ShoppingActivity).viewModel\n        viewModel.getUser()\n    }\n\n    override fun onCreateView (\n        inflater: LayoutInflater, container: ViewGroup?,\n        savedInstanceState: Bundle?\n    ): View {\n        binding = FragmentProfileBinding.inflate(inflater, container, false)\n\n        return binding.root\n    }\n\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\n        super.onViewCreated(view, savedInstanceState)\n\n        onHomeClick()\n        onLogoutClick()\n        onBillingAndAddressesClick()\n        onProfileClick()\n        onAllOrderClick()\n        onTrackOrderClick()\n        onJoinPartnershipCLick()\n        onViewPartnershipClick()\n        onAdminClick()\n        onHelpClick()\n\n        observeProfile()\n        binding.tvVersionCode.text =\n            \"${resources.getText(R.string.g_version)} ${BuildConfig.VERSION_NAME}\"\n\n    }\n\n    private fun onHelpClick() {\n        binding.linearHelp.setOnClickListener {\n            findNavController().navigate(R.id.action_profileFragment_to_helpFragment)\n        }\n    }\n\n    private fun onAdminClick() {\n        binding.linearAdmin.setOnClickListener {\n            findNavController().navigate(R.id.action_profileFragment_to_adminDashboardFragment)\n        }\n    }\n\n\n    private fun onJoinPartnershipCLick() {\n        binding.linearJoinPartnership.setOnClickListener {\n            findNavController().navigate(R.id.action_profileFragment_to_joinPartnerFragment)\n        }\n    }\n    private fun onViewPartnershipClick() {\n        binding.linearViewPartnership.setOnClickListener {\n            findNavController().navigate(R.id.action_profileFragment_to_viewPartnershipFragment)\n        }\n    }\n\n    private fun onTrackOrderClick() {\n        binding.linearTrackOrder.setOnClickListener {\n            val snackBar = requireActivity().findViewById<CoordinatorLayout>(R.id.snackBar_coordinator)\n            Snackbar.make(snackBar,resources.getText(R.string.g_coming_soon),Snackbar.LENGTH_SHORT).show()\n        }\n    }\n\n    private fun onAllOrderClick() {\n        binding.allOrders.setOnClickListener {\n            findNavController().navigate(R.id.action_profileFragment_to_allOrdersFragment)\n        }\n    }\n\n    private fun onProfileClick() {\n        binding.constraintProfile.setOnClickListener {\n            user?.let {\n                val bundle = Bundle()\n                bundle.putParcelable(\"user\",user)\n                findNavController().navigate(R.id.action_profileFragment_to_editUserInformation,bundle)\n            }\n        }\n\n\n    }\n\n    var user: User?=null\n    private fun observeProfile() {\n        viewModel.profile.observe(viewLifecycleOwner) { response ->\n            when (response) {\n                is Resource.Loading -> {\n                    showLoading()\n                    return@observe\n                }\n\n                is Resource.Success -> {\n                    hideLoading()\n                    val user = response.data\n                    this.user = user\n                    binding.apply {\n                        tvUserName.text = user?.firstName + \" \" + user?.lastName\n                        Glide.with(requireView()).load(user?.imagePath)\n                            .error(R.drawable.ic_default_profile_picture).into(binding.imgUser)\n                    }\n                    return@observe\n                }\n\n                is Resource.Error -> {\n                    hideLoading()\n                    Toast.makeText(\n                        activity,\n                        resources.getText(R.string.error_occurred),\n                        Toast.LENGTH_SHORT\n                    ).show()\n                    Log.e(TAG, response.message.toString())\n                    return@observe\n                }\n            }\n        }\n    }\n\n    private fun hideLoading() {\n        binding.apply {\n            binding.progressbarSettings.visibility = View.GONE\n            constraintParnet.visibility = View.VISIBLE\n        }\n    }\n\n    private fun showLoading() {\n        binding.apply {\n            binding.progressbarSettings.visibility = View.VISIBLE\n            constraintParnet.visibility = View.INVISIBLE\n        }\n    }\n\n    private fun onBillingAndAddressesClick() {\n        binding.linearBilling.setOnClickListener {\n            val bundle = Bundle()\n            bundle.putString(\"clickFlag\", UPDATE_ADDRESS_FLAG)\n            findNavController().navigate(R.id.action_profileFragment_to_billingFragment, bundle)\n        }\n    }\n\n    private fun onLogoutClick() {\n\n        binding.linearOut.setOnClickListener {\n            FirebaseAuth.getInstance().signOut()\n            val intent = Intent(context, LunchActivity::class.java)\n            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)\n            startActivity(intent)\n        }\n    }\n\n    private fun onHomeClick() {\n        val btm = activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation)\n        btm?.menu?.getItem(0)?.setOnMenuItemClickListener {\n            activity?.onBackPressed()\n            true\n        }\n    }\n\n    override fun onResume() {\n        super.onResume()\n        val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation)\n        bottomNavigation?.visibility = View.VISIBLE\n    }\n\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/fragments/shopping/ProfileFragment.kt b/app/src/main/java/com/example/kleine/fragments/shopping/ProfileFragment.kt
+--- a/app/src/main/java/com/example/kleine/fragments/shopping/ProfileFragment.kt	
++++ b/app/src/main/java/com/example/kleine/fragments/shopping/ProfileFragment.kt	
+@@ -7,64 +7,123 @@
+ import android.view.LayoutInflater
+ import android.view.View
+ import android.view.ViewGroup
++import android.widget.TextView
+ import android.widget.Toast
+ import androidx.coordinatorlayout.widget.CoordinatorLayout
++import androidx.lifecycle.Observer
++import androidx.lifecycle.ViewModelProvider
+ import androidx.navigation.fragment.findNavController
+ import com.bumptech.glide.Glide
+-import com.example.kleine.BuildConfig
+ import com.example.kleine.R
+ import com.example.kleine.activities.LunchActivity
+ import com.example.kleine.activities.ShoppingActivity
+ import com.example.kleine.databinding.FragmentProfileBinding
++import com.example.kleine.firebaseDatabase.FirebaseDb
+ import com.example.kleine.model.User
+ import com.example.kleine.resource.Resource
+ import com.example.kleine.util.Constants.Companion.UPDATE_ADDRESS_FLAG
++import com.example.kleine.util.NetworkChecker
++import com.example.kleine.util.NetworkCheckerImpl
++import com.example.kleine.viewmodel.lunchapp.AppDatabase
++import com.example.kleine.viewmodel.lunchapp.KleineViewModel
++import com.example.kleine.viewmodel.lunchapp.ViewModelProviderFactory
+ import com.example.kleine.viewmodel.shopping.ShoppingViewModel
++import com.example.kleine.viewmodel.shopping.ShoppingViewModelProviderFactory
+ import com.google.android.material.bottomnavigation.BottomNavigationView
+ import com.google.android.material.snackbar.Snackbar
+ import com.google.firebase.auth.FirebaseAuth
+ 
+ 
+ class ProfileFragment : Fragment() {
+-    val TAG = "ProfileFragment"
++    private val TAG = "ProfileFragment"
+     private lateinit var binding: FragmentProfileBinding
+-    private lateinit var viewModel: ShoppingViewModel
++    private lateinit var viewModel: ShoppingViewModel  // Changed to ShoppingViewModel
++    private lateinit var networkChecker: NetworkChecker
++    private lateinit var kleineViewModel: KleineViewModel  // This is for KleineViewModel
++
++
+ 
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
++        networkChecker = NetworkCheckerImpl(requireContext())
++
++        val currentUser = FirebaseAuth.getInstance().currentUser
++        if (currentUser == null) {
++            Log.e(TAG, "User is NOT logged in.")
++            // Navigate back to the login screen or do whatever is appropriate
++            return
++        }
+ 
+         viewModel = (activity as ShoppingActivity).viewModel
+         viewModel.getUser()
+     }
+ 
+-    override fun onCreateView (
++
++    override fun onCreateView(
+         inflater: LayoutInflater, container: ViewGroup?,
+         savedInstanceState: Bundle?
+     ): View {
+         binding = FragmentProfileBinding.inflate(inflater, container, false)
+ 
++        val firebaseDb = FirebaseDb()
++        val appDatabase = AppDatabase.getDatabase(requireContext())
++        val viewModelFactory = ViewModelProviderFactory(firebaseDb, appDatabase)
++
++        val kleineViewModelFactory = ViewModelProviderFactory(firebaseDb, appDatabase)
++        kleineViewModel = ViewModelProvider(this, kleineViewModelFactory).get(KleineViewModel::class.java)
++
++
++
++        // Initialize ShoppingViewModel
++        val networkChecker = NetworkCheckerImpl(requireContext())
++        val shoppingViewModelFactory = ShoppingViewModelProviderFactory(firebaseDb, appDatabase, networkChecker)
++        viewModel = ViewModelProvider(this, shoppingViewModelFactory).get(ShoppingViewModel::class.java)
++
++
++        val currentUser = FirebaseAuth.getInstance().currentUser
++        if (currentUser != null) {
++            observeProfile()
++        } else {
++            // User is not logged in. Handle it accordingly.
++        }
++
++        // Other UI related code
++        onLogoutClick()
++
+         return binding.root
+     }
+ 
++
++
++
++
+     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+         super.onViewCreated(view, savedInstanceState)
+ 
++        val firebaseDb = FirebaseDb()
++        val appDatabase = AppDatabase.getDatabase(requireContext())
++        val providerFactory = ShoppingViewModelProviderFactory(firebaseDb, appDatabase, networkChecker)
++
++        val currentUser = FirebaseAuth.getInstance().currentUser
++        if (currentUser != null) {
++            observeProfile()
++        } else {
++            Log.e(TAG, "User is NOT logged in.")
++            // Decide what to do if the user is not logged in.
++        }
++
+         onHomeClick()
+         onLogoutClick()
+         onBillingAndAddressesClick()
+         onProfileClick()
+         onAllOrderClick()
+         onTrackOrderClick()
+-        onJoinPartnershipCLick()
++        //onJoinPartnershipClick()
+         onViewPartnershipClick()
+         onAdminClick()
+         onHelpClick()
+-
+-        observeProfile()
+-        binding.tvVersionCode.text =
+-            "${resources.getText(R.string.g_version)} ${BuildConfig.VERSION_NAME}"
++    }
+ 
+-    }
+ 
+     private fun onHelpClick() {
+         binding.linearHelp.setOnClickListener {
+@@ -149,7 +208,6 @@
+             }
+         }
+     }
+-
+     private fun hideLoading() {
+         binding.apply {
+             binding.progressbarSettings.visibility = View.GONE
+@@ -172,8 +230,11 @@
+         }
+     }
+ 
++
++
++
++
+     private fun onLogoutClick() {
+-
+         binding.linearOut.setOnClickListener {
+             FirebaseAuth.getInstance().signOut()
+             val intent = Intent(context, LunchActivity::class.java)
+@@ -194,6 +255,10 @@
+         super.onResume()
+         val bottomNavigation = activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
+         bottomNavigation?.visibility = View.VISIBLE
++
++        super.onResume()
++        viewModel.getUser()
++        observeProfile()
+     }
+ 
+ 
+Index: app/src/main/java/com/example/kleine/viewmodel/lunchapp/ViewModelProviderFactory.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.kleine.viewmodel.lunchapp\n\nimport androidx.lifecycle.ViewModel\nimport androidx.lifecycle.ViewModelProvider\nimport com.example.kleine.firebaseDatabase.FirebaseDb\n\nclass ViewModelProviderFactory(\n    private val firebaseDb: FirebaseDb\n) : ViewModelProvider.Factory {\n    override fun <T : ViewModel?> create(modelClass: Class<T>): T {\n        return KleineViewModel(firebaseDb) as T\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/viewmodel/lunchapp/ViewModelProviderFactory.kt b/app/src/main/java/com/example/kleine/viewmodel/lunchapp/ViewModelProviderFactory.kt
+--- a/app/src/main/java/com/example/kleine/viewmodel/lunchapp/ViewModelProviderFactory.kt	
++++ b/app/src/main/java/com/example/kleine/viewmodel/lunchapp/ViewModelProviderFactory.kt	
+@@ -4,10 +4,18 @@
+ import androidx.lifecycle.ViewModelProvider
+ import com.example.kleine.firebaseDatabase.FirebaseDb
+ 
++
++
+ class ViewModelProviderFactory(
+-    private val firebaseDb: FirebaseDb
++    private val firebaseDb: FirebaseDb,
++    private val appDatabase: AppDatabase // Assuming you have AppDatabase imported
+ ) : ViewModelProvider.Factory {
+-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+-        return KleineViewModel(firebaseDb) as T
++    override fun <T : ViewModel> create(modelClass: Class<T>): T {
++        if (modelClass.isAssignableFrom(KleineViewModel::class.java)) {
++            return KleineViewModel(firebaseDb, appDatabase) as T
++        }
++        throw IllegalArgumentException("Unknown ViewModel class")
+     }
+-}
+\ No newline at end of file
++}
++
++
+Index: app/src/main/java/com/example/kleine/util/NetworkChecker.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/util/NetworkChecker.kt b/app/src/main/java/com/example/kleine/util/NetworkChecker.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/example/kleine/util/NetworkChecker.kt	
+@@ -0,0 +1,5 @@
++package com.example.kleine.util
++
++interface NetworkChecker {
++    fun isNetworkConnected(): Boolean
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/kleine/converters/StatusConverter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/converters/StatusConverter.kt b/app/src/main/java/com/example/kleine/converters/StatusConverter.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/example/kleine/converters/StatusConverter.kt	
+@@ -0,0 +1,13 @@
++package com.example.kleine.converters;
++
++import androidx.room.TypeConverter;
++import com.example.kleine.model.Status;
++
++class StatusConverter {
++
++    @TypeConverter
++    fun toStatus(value: String) = enumValueOf<Status>(value)
++
++    @TypeConverter
++    fun fromStatus(value: Status) = value.name
++}
+Index: app/src/main/java/com/example/kleine/viewmodel/lunchapp/AppDatabase.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/viewmodel/lunchapp/AppDatabase.kt b/app/src/main/java/com/example/kleine/viewmodel/lunchapp/AppDatabase.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/example/kleine/viewmodel/lunchapp/AppDatabase.kt	
+@@ -0,0 +1,35 @@
++package com.example.kleine.viewmodel.lunchapp
++
++import android.content.Context
++import androidx.room.Database
++import androidx.room.Room
++import androidx.room.RoomDatabase
++import com.example.kleine.DAO.UserDao
++import com.example.kleine.model.User
++
++@Database(entities = [User::class], version = 2)
++abstract class AppDatabase : RoomDatabase() {
++
++    abstract fun userDao(): UserDao
++
++    companion object {
++        @Volatile
++        private var INSTANCE: AppDatabase? = null
++
++        fun getDatabase(context: Context): AppDatabase {
++            return INSTANCE ?: synchronized(this) {
++                val instance = Room.databaseBuilder(
++                    context.applicationContext,
++                    AppDatabase::class.java,
++                    "user_database"
++                )
++                    .fallbackToDestructiveMigration()  // Add this line
++                    .build()
++
++
++                INSTANCE = instance
++                instance
++            }
++        }
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/kleine/activities/ShoppingActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.kleine.activities\n\nimport android.os.Bundle\nimport android.util.Log\nimport android.widget.Toast\nimport androidx.appcompat.app.AppCompatActivity\nimport androidx.lifecycle.Observer\nimport androidx.lifecycle.ViewModelProvider\nimport androidx.navigation.Navigation\nimport androidx.navigation.ui.NavigationUI\nimport com.example.kleine.R\nimport com.example.kleine.firebaseDatabase.FirebaseDb\nimport com.example.kleine.resource.Resource\nimport com.example.kleine.viewmodel.shopping.ShoppingViewModel\nimport com.example.kleine.viewmodel.shopping.ShoppingViewModelProviderFactory\nimport com.example.kleine.viewmodel.shopping.cart.CartViewModel\nimport com.google.android.material.bottomnavigation.BottomNavigationView\n\nprivate const val TAG = \"ShoppingActivity\"\n\nclass ShoppingActivity : AppCompatActivity() {\n\n    val viewModel by lazy {\n        val fDatabase = FirebaseDb()\n        val providerFactory = ShoppingViewModelProviderFactory(fDatabase)\n        ViewModelProvider(this, providerFactory)[ShoppingViewModel::class.java]\n    }\n\n    private lateinit var cartViewModel: CartViewModel\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContentView(R.layout.activity_shopping)\n\n\n\n        cartViewModel = CartViewModel()\n//        supportActionBar!!.hide()\n\n        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)\n        val navController = Navigation.findNavController(this, R.id.host_fragment)\n        NavigationUI.setupWithNavController(bottomNavigation, navController)\n\n        observeCartProductsCount(bottomNavigation)\n    }\n\n\n    private fun observeCartProductsCount(bottomNavigation: BottomNavigationView) {\n\n        cartViewModel.cartItemsCount.observe(this, Observer { response ->\n            when (response) {\n                is Resource.Loading -> {\n                    return@Observer\n                }\n\n                is Resource.Success -> {\n                    if (response.data != 0)\n                        bottomNavigation.getOrCreateBadge(R.id.cartFragment).apply {\n                            backgroundColor = resources.getColor(R.color.g_dark_blue)\n                            number = response.data!!\n                        }\n                    else {\n                        bottomNavigation.getOrCreateBadge(R.id.cartFragment).apply {\n                            backgroundColor = resources.getColor(R.color.g_white)\n                            number = response.data\n                        }\n                    }\n                    return@Observer\n                }\n\n                is Resource.Error -> {\n                    Log.e(TAG, response.message.toString())\n                    Toast.makeText(this, \"Oops error occurred\", Toast.LENGTH_SHORT).show()\n                    return@Observer\n                }\n            }\n        })\n    }\n\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/activities/ShoppingActivity.kt b/app/src/main/java/com/example/kleine/activities/ShoppingActivity.kt
+--- a/app/src/main/java/com/example/kleine/activities/ShoppingActivity.kt	
++++ b/app/src/main/java/com/example/kleine/activities/ShoppingActivity.kt	
+@@ -4,6 +4,7 @@
+ import android.util.Log
+ import android.widget.Toast
+ import androidx.appcompat.app.AppCompatActivity
++import androidx.core.content.ContentProviderCompat.requireContext
+ import androidx.lifecycle.Observer
+ import androidx.lifecycle.ViewModelProvider
+ import androidx.navigation.Navigation
+@@ -11,6 +12,8 @@
+ import com.example.kleine.R
+ import com.example.kleine.firebaseDatabase.FirebaseDb
+ import com.example.kleine.resource.Resource
++import com.example.kleine.util.NetworkCheckerImpl
++import com.example.kleine.viewmodel.lunchapp.AppDatabase
+ import com.example.kleine.viewmodel.shopping.ShoppingViewModel
+ import com.example.kleine.viewmodel.shopping.ShoppingViewModelProviderFactory
+ import com.example.kleine.viewmodel.shopping.cart.CartViewModel
+@@ -22,7 +25,9 @@
+ 
+     val viewModel by lazy {
+         val fDatabase = FirebaseDb()
+-        val providerFactory = ShoppingViewModelProviderFactory(fDatabase)
++        val appDatabase = AppDatabase.getDatabase(applicationContext)
++        val networkChecker = NetworkCheckerImpl(applicationContext)
++        val providerFactory = ShoppingViewModelProviderFactory(fDatabase, appDatabase, networkChecker)
+         ViewModelProvider(this, providerFactory)[ShoppingViewModel::class.java]
+     }
+ 
+Index: app/src/main/java/com/example/kleine/util/NetworkCheckerImpl.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/util/NetworkCheckerImpl.kt b/app/src/main/java/com/example/kleine/util/NetworkCheckerImpl.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/example/kleine/util/NetworkCheckerImpl.kt	
+@@ -0,0 +1,24 @@
++package com.example.kleine.util
++
++
++import android.content.Context
++import android.net.ConnectivityManager
++import android.net.NetworkCapabilities
++import android.os.Build
++import com.example.kleine.util.NetworkChecker
++
++class NetworkCheckerImpl(private val context: Context) : NetworkChecker {
++    override fun isNetworkConnected(): Boolean {
++        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
++        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
++            val network = connectivityManager.activeNetwork ?: return false
++            val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
++            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
++        } else {
++            @Suppress("DEPRECATION")
++            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
++            @Suppress("DEPRECATION")
++            networkInfo.isConnected
++        }
++    }
++}
+Index: app/src/main/java/com/example/kleine/viewmodel/shopping/cart/CartViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.kleine.viewmodel.shopping.cart\n\nimport androidx.lifecycle.MutableLiveData\nimport androidx.lifecycle.ViewModel\nimport com.example.kleine.firebaseDatabase.FirebaseDb\nimport com.example.kleine.model.CartProduct\nimport com.example.kleine.model.Product\nimport com.example.kleine.resource.Resource\n\nclass CartViewModel(\n) : ViewModel() {\n    val cartProducts = MutableLiveData<Resource<List<CartProduct>>>()\n    val cartItemsCount = MutableLiveData<Resource<Int>>()\n    val plus = MutableLiveData<Resource<Int>>()\n    val minus = MutableLiveData<Resource<Int>>()\n    val deleteProduct = MutableLiveData<Resource<Boolean>>()\n    val product = MutableLiveData<Resource<Product>>()\n    var firebaseDb: FirebaseDb = FirebaseDb()\n\n\n    init {\n        getItemsInCart()\n    }\n\n    private fun getItemsInCart() {\n        cartProducts.postValue(Resource.Loading())\n        cartItemsCount.postValue(Resource.Loading())\n\n        firebaseDb.getItemsInCart().addSnapshotListener { value, error ->\n            if (error != null) {\n                cartProducts.postValue(Resource.Error(error.message))\n                cartItemsCount.postValue(Resource.Error(error.message))\n            } else {\n                val products = value!!.toObjects(CartProduct::class.java)\n                cartProducts.postValue(Resource.Success(products))\n                cartItemsCount.postValue(Resource.Success(products.size))\n            }\n        }\n    }\n\n    fun increaseQuantity(product: CartProduct) {\n        plus.postValue(Resource.Loading())\n        firebaseDb.getProductInCart(product).addOnCompleteListener {\n            if (it.isSuccessful) {\n                val productToIncrease = it.result!!.documents[0]\n                firebaseDb.increaseProductQuantity(productToIncrease.id)\n                    .addOnCompleteListener { increase ->\n                        if (increase.isSuccessful)\n                            plus.postValue(Resource.Success(product.quantity + 1))\n                        else\n                            plus.postValue(Resource.Error(increase.exception.toString()))\n                    }\n            } else\n                plus.postValue(Resource.Error(it.exception.toString()))\n\n        }\n    }\n\n    fun decreaseQuantity(product: CartProduct) {\n        minus.postValue(Resource.Loading())\n        firebaseDb.getProductInCart(product).addOnCompleteListener {\n            if (it.isSuccessful) {\n                val productToIncrease = it.result!!.documents[0]\n                firebaseDb.decreaseProductQuantity(productToIncrease.id)\n                    .addOnCompleteListener { decrease ->\n                        if (decrease.isSuccessful)\n                            minus.postValue(Resource.Success(product.quantity + 1))\n                        else\n                            minus.postValue(Resource.Error(decrease.exception.toString()))\n                    }\n            } else\n                minus.postValue(Resource.Error(it.exception.toString()))\n\n        }\n    }\n\n    fun deleteProductFromCart(product: CartProduct) {\n        deleteProduct.postValue(Resource.Loading())\n        firebaseDb.getProductInCart(product).addOnCompleteListener { productToDelete ->\n            if (productToDelete.isSuccessful) {\n                val documentId = productToDelete.result!!.documents[0].id\n                firebaseDb.deleteProductFromCart(documentId).addOnCompleteListener {\n                    if (it.isSuccessful)\n                        deleteProduct.postValue(Resource.Success(true))\n                    else\n                        deleteProduct.postValue(Resource.Error(it.exception.toString()))\n                }\n\n            } else\n                deleteProduct.postValue(Resource.Error(productToDelete.exception.toString()))\n        }\n    }\n\n    fun getProductFromCartProduct(cartProduct: CartProduct) {\n        product.postValue(Resource.Loading())\n        firebaseDb.getProductFromCartProduct(cartProduct).addOnCompleteListener {\n            if (it.isSuccessful) {\n                val tempProduct = it.result!!.toObjects(Product::class.java)[0]\n                product.postValue(Resource.Success(tempProduct))\n            } else\n                product.postValue(Resource.Error(it.exception.toString()))\n        }\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/viewmodel/shopping/cart/CartViewModel.kt b/app/src/main/java/com/example/kleine/viewmodel/shopping/cart/CartViewModel.kt
+--- a/app/src/main/java/com/example/kleine/viewmodel/shopping/cart/CartViewModel.kt	
++++ b/app/src/main/java/com/example/kleine/viewmodel/shopping/cart/CartViewModel.kt	
+@@ -17,24 +17,40 @@
+     val product = MutableLiveData<Resource<Product>>()
+     var firebaseDb: FirebaseDb = FirebaseDb()
+ 
++    private var cartInitialized = false
+ 
+     init {
+-        getItemsInCart()
++        // Do not call getItemsInCart() here anymore
++    }
++
++    // New method to lazily initialize cart
++    fun lazyInitializeCart() {
++        if (!cartInitialized) {
++            getItemsInCart()
++            cartInitialized = true
++        }
+     }
+ 
+     private fun getItemsInCart() {
+         cartProducts.postValue(Resource.Loading())
+         cartItemsCount.postValue(Resource.Loading())
+ 
+-        firebaseDb.getItemsInCart().addSnapshotListener { value, error ->
+-            if (error != null) {
+-                cartProducts.postValue(Resource.Error(error.message))
+-                cartItemsCount.postValue(Resource.Error(error.message))
+-            } else {
+-                val products = value!!.toObjects(CartProduct::class.java)
+-                cartProducts.postValue(Resource.Success(products))
+-                cartItemsCount.postValue(Resource.Success(products.size))
++        val cartCollection = firebaseDb.getItemsInCart()
++        if (cartCollection != null) {
++            cartCollection.addSnapshotListener { value, error ->
++                if (error != null) {
++                    cartProducts.postValue(Resource.Error(error.message))
++                    cartItemsCount.postValue(Resource.Error(error.message))
++                } else {
++                    val products = value!!.toObjects(CartProduct::class.java)
++                    cartProducts.postValue(Resource.Success(products))
++                    cartItemsCount.postValue(Resource.Success(products.size))
++                }
+             }
++        } else {
++            // Handle the case where cartCollection is null
++            cartProducts.postValue(Resource.Error("Cart collection is null"))
++            cartItemsCount.postValue(Resource.Error("Cart collection is null"))
+         }
+     }
+ 
+Index: app/src/main/java/com/example/kleine/DAO/UserDao.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/DAO/UserDao.kt b/app/src/main/java/com/example/kleine/DAO/UserDao.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/example/kleine/DAO/UserDao.kt	
+@@ -0,0 +1,30 @@
++package com.example.kleine.DAO
++
++import androidx.lifecycle.LiveData
++import androidx.room.Dao
++import androidx.room.Insert
++import androidx.room.OnConflictStrategy
++import androidx.room.Query
++import com.example.kleine.model.User
++
++@Dao
++interface UserDao {
++
++    @Query("SELECT * FROM users WHERE email = :email AND password = :password")
++    suspend fun getUser(email: String, password: String): User?
++
++    @Insert(onConflict = OnConflictStrategy.REPLACE)
++    suspend fun insertUser(user: User)
++
++    @Query("SELECT * FROM users WHERE email = :email LIMIT 1")
++    fun observeUserByEmail(email: String): LiveData<User?>
++
++    @Query("SELECT * FROM users WHERE email = :email")
++    suspend fun fetchProfileFromRoom(email: String): User?
++
++    @Query("SELECT * FROM users WHERE email = :email")
++    suspend fun findUserByEmail(email: String): User?
++
++    @Query("SELECT * FROM users")
++    suspend fun getAllUsers(): List<User>
++}
+Index: app/src/main/res/layout/product_layout_row.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<layout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\">\n    <data>\n        <variable\n            name=\"productModel\"\n            type=\"com.example.kleine.model.Product\" />\n    </data>\n    <androidx.cardview.widget.CardView\n        android:id=\"@+id/productCard\"\n        android:orientation=\"vertical\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        app:cardCornerRadius=\"@dimen/_20sdp\"\n        android:layout_marginStart=\"@dimen/_23sdp\"\n        android:layout_marginEnd=\"@dimen/_23sdp\"\n        android:layout_margin=\"@dimen/_10sdp\"\n        android:elevation=\"@dimen/_10sdp\">\n\n        <androidx.constraintlayout.widget.ConstraintLayout\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:padding=\"@dimen/_5sdp\">\n\n            <ImageView\n                android:id=\"@+id/imageView\"\n                style=\"@style/style_card_image\"\n                app:layout_constraintBottom_toBottomOf=\"parent\"\n                app:layout_constraintStart_toStartOf=\"parent\"\n                app:layout_constraintTop_toTopOf=\"parent\"\n                app:layout_constraintVertical_bias=\"1.0\"\n                tools:ignore=\"MissingConstraints\"\n                android:contentDescription=\"@string/string_product_image\" />\n\n            <ImageButton\n                android:id=\"@+id/buttonHeart\"\n                style=\"@style/style_heart\"\n                app:layout_constraintBottom_toBottomOf=\"@+id/cardView2\"\n                app:layout_constraintEnd_toEndOf=\"parent\"\n                app:layout_constraintHorizontal_bias=\"1.0\"\n                app:layout_constraintStart_toEndOf=\"@+id/cardView2\"\n                app:layout_constraintTop_toTopOf=\"@+id/cardView2\"\n                tools:ignore=\"MissingConstraints\"\n                android:contentDescription=\"@string/string_fav\" />\n\n            <androidx.cardview.widget.CardView\n                android:id=\"@+id/cardView2\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:layout_marginStart=\"@dimen/_12sdp\"\n                android:layout_marginTop=\"@dimen/_16sdp\"\n                android:elevation=\"@dimen/_5sdp\"\n                android:orientation=\"vertical\"\n                app:cardBackgroundColor=\"@color/colorPrimaryDark\"\n                app:cardCornerRadius=\"@dimen/_5sdp\"\n                app:layout_constraintStart_toEndOf=\"@+id/imageView\"\n                app:layout_constraintTop_toTopOf=\"parent\">\n\n                <TextView\n                    android:id=\"@+id/productCategory\"\n                    style=\"@style/style_text_white_small\"\n                    android:layout_width=\"wrap_content\"\n                    android:layout_height=\"wrap_content\"\n                    android:layout_gravity=\"center\"\n                    android:gravity=\"center\"\n                    android:paddingStart=\"@dimen/_5sdp\"\n                    android:paddingEnd=\"@dimen/_5sdp\"\n                    android:text=\"@{productModel.productCategory}\"\n                    app:layout_constraintEnd_toEndOf=\"parent\"\n                    app:layout_constraintStart_toEndOf=\"@+id/imageView\"\n                    app:layout_constraintTop_toTopOf=\"parent\"\n                    tools:text=\"@string/string_productCategory\"\n                    android:textSize=\"@dimen/_10ssp\"/>\n            </androidx.cardview.widget.CardView>\n\n\n            <TextView\n                android:id=\"@+id/productTitle\"\n                style=\"@style/style_text_black_norm\"\n                android:layout_width=\"@dimen/_170sdp\"\n                android:layout_height=\"wrap_content\"\n                android:layout_marginStart=\"@dimen/_4sdp\"\n                android:layout_marginTop=\"@dimen/_2sdp\"\n                android:layout_marginEnd=\"@dimen/_16sdp\"\n                android:textSize=\"@dimen/_20ssp\"\n                android:text=\"@{productModel.productName}\"\n                app:layout_constraintStart_toStartOf=\"@+id/cardView2\"\n                app:layout_constraintTop_toBottomOf=\"@+id/cardView2\"\n                tools:text=\"@string/string_productTitle\" />\n\n            <androidx.appcompat.widget.LinearLayoutCompat\n                android:id=\"@+id/linearLayoutCompat3\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:layout_marginTop=\"@dimen/_2sdp\"\n                android:layout_marginBottom=\"@dimen/_16sdp\"\n                android:orientation=\"horizontal\"\n                app:layout_constraintBottom_toBottomOf=\"parent\"\n                app:layout_constraintStart_toStartOf=\"@+id/product\"\n                app:layout_constraintTop_toBottomOf=\"@+id/product\">\n\n                <ImageView\n                    android:id=\"@+id/imageView2\"\n                    android:layout_width=\"@dimen/_12sdp\"\n                    android:layout_height=\"@dimen/_12sdp\"\n                    android:layout_gravity=\"center\"\n                    android:src=\"@drawable/ic_star\"\n                    app:layout_constraintBottom_toBottomOf=\"parent\"\n                    app:layout_constraintEnd_toStartOf=\"@+id/exp_tv\"\n                    app:layout_constraintStart_toStartOf=\"parent\"\n                    app:layout_constraintTop_toBottomOf=\"parent\"\n                    android:contentDescription=\"@string/string_rate\">\n\n                </ImageView>\n\n\n                <TextView\n                    android:id=\"@+id/exp_tv\"\n                    style=\"@style/style_text_black_norm\"\n                    android:layout_width=\"wrap_content\"\n                    android:layout_height=\"wrap_content\"\n                    android:layout_gravity=\"center\"\n                    android:text=\"@{String.valueOf(productModel.productRate)}\"\n                    android:textSize=\"@dimen/_10ssp\"\n                    android:layout_marginStart=\"@dimen/_2sdp\"\n                    app:layout_constraintBottom_toBottomOf=\"parent\"\n                    app:layout_constraintEnd_toEndOf=\"@+id/product\"\n                    app:layout_constraintStart_toStartOf=\"@+id/product\"\n                    app:layout_constraintTop_toBottomOf=\"@+id/product\"\n                    tools:ignore=\"MissingConstraints\"\n                    tools:text=\"@string/string_productRate\" />\n\n\n            </androidx.appcompat.widget.LinearLayoutCompat>\n\n            <TextView\n                android:id=\"@+id/product\"\n                style=\"@style/style_primaryColor_bold\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:layout_marginTop=\"@dimen/_1sdp\"\n                android:text=\"@{String.valueOf(productModel.description)}\"\n                app:layout_constraintStart_toStartOf=\"@+id/productTitle\"\n                app:layout_constraintTop_toBottomOf=\"@+id/productTitle\"\n                tools:ignore=\"MissingConstraints\"\n                android:textSize=\"@dimen/_10ssp\"\n                tools:text=\"@string/string_productTitle\" />\n\n            <TextView\n                android:id=\"@+id/textView8\"\n                style=\"@style/style_primaryColor_bold\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:layout_marginStart=\"8dp\"\n                android:textColor=\"@color/colorPrimary\"\n                android:textSize=\"@dimen/_16ssp\"\n                android:textStyle=\"bold\"\n                app:layout_constraintBottom_toBottomOf=\"@+id/product\"\n                app:layout_constraintStart_toEndOf=\"@+id/product\"\n                app:layout_constraintTop_toTopOf=\"@+id/product\"\n                app:layout_constraintVertical_bias=\"0.0\">\n\n            </TextView>\n        </androidx.constraintlayout.widget.ConstraintLayout>\n\n    </androidx.cardview.widget.CardView >\n</layout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/product_layout_row.xml b/app/src/main/res/layout/product_layout_row.xml
+--- a/app/src/main/res/layout/product_layout_row.xml	
++++ b/app/src/main/res/layout/product_layout_row.xml	
+@@ -66,7 +66,7 @@
+                     android:gravity="center"
+                     android:paddingStart="@dimen/_5sdp"
+                     android:paddingEnd="@dimen/_5sdp"
+-                    android:text="@{productModel.productCategory}"
++                    android:text="=@{productModel.productCategory}"
+                     app:layout_constraintEnd_toEndOf="parent"
+                     app:layout_constraintStart_toEndOf="@+id/imageView"
+                     app:layout_constraintTop_toTopOf="parent"
+@@ -84,7 +84,7 @@
+                 android:layout_marginTop="@dimen/_2sdp"
+                 android:layout_marginEnd="@dimen/_16sdp"
+                 android:textSize="@dimen/_20ssp"
+-                android:text="@{productModel.productName}"
++                android:text="=@{productModel.productName}"
+                 app:layout_constraintStart_toStartOf="@+id/cardView2"
+                 app:layout_constraintTop_toBottomOf="@+id/cardView2"
+                 tools:text="@string/string_productTitle" />
+@@ -121,7 +121,7 @@
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_gravity="center"
+-                    android:text="@{String.valueOf(productModel.productRate)}"
++                    android:text="=@{String.valueOf(productModel.productRate)}"
+                     android:textSize="@dimen/_10ssp"
+                     android:layout_marginStart="@dimen/_2sdp"
+                     app:layout_constraintBottom_toBottomOf="parent"
+@@ -140,7 +140,7 @@
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="@dimen/_1sdp"
+-                android:text="@{String.valueOf(productModel.description)}"
++                android:text="=@{String.valueOf(productModel.description)}"
+                 app:layout_constraintStart_toStartOf="@+id/productTitle"
+                 app:layout_constraintTop_toBottomOf="@+id/productTitle"
+                 tools:ignore="MissingConstraints"
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\n    id 'com.android.application'\n    id 'kotlin-android'\n    id 'com.google.gms.google-services'\n    id 'kotlin-parcelize'\n    id 'androidx.navigation.safeargs.kotlin'\n    id 'dagger.hilt.android.plugin'\n}\n\n\nandroid {\n    compileSdk 31\n\n    defaultConfig {\n        applicationId \"com.example.kleine\"\n        minSdk 21\n        targetSdk 31\n        versionCode 1\n        versionName \"1.0\"\n\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\n    }\n\n    buildTypes {\n        release {\n            minifyEnabled false\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\n        }\n    }\n    compileOptions {\n        sourceCompatibility JavaVersion.VERSION_1_8\n        targetCompatibility JavaVersion.VERSION_1_8\n    }\n    kotlinOptions {\n        jvmTarget = '1.8'\n    }\n\n    buildFeatures{\n        viewBinding true\n        dataBinding true\n    }\n}\n\ndependencies {\n\n    apply plugin :\"kotlin-kapt\"\n    implementation 'androidx.core:core-ktx:1.7.0'\n    implementation 'androidx.appcompat:appcompat:1.4.1'\n    implementation 'com.google.android.material:material:1.5.0'\n    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\n    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'\n    implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'\n\n    testImplementation 'junit:junit:4.+'\n    androidTestImplementation 'androidx.test.ext:junit:1.1.3'\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'\n\n    //intuit\n    implementation 'com.intuit.sdp:sdp-android:1.0.6'\n    implementation 'com.intuit.ssp:ssp-android:1.0.6'\n\n\n    //loading button\n    implementation 'br.com.simplepass:loading-button-android:2.2.0'\n\n    //firebase\n    implementation 'com.google.firebase:firebase-firestore:24.0.1'\n    implementation 'com.google.firebase:firebase-firestore-ktx:24.0.1'\n    implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'\n    implementation 'com.google.firebase:firebase-storage'\n    implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'\n    implementation 'com.google.firebase:firebase-common-ktx:20.0.0'\n    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.0'\n    implementation 'com.firebaseui:firebase-ui-auth:4.3.2'\n\n    //google play services\n    implementation 'com.google.android.gms:play-services-auth:20.1.0'\n\n    //smooth bar\n    implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.9'\n\n    //Glide\n    implementation 'com.github.bumptech.glide:glide:4.13.0'\n    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'\n\n    //storage\n    implementation 'com.firebaseui:firebase-ui-storage:8.0.0'\n\n    //circular image\n    implementation 'de.hdodenhof:circleimageview:3.1.0'\n\n    //Navigation and safe args\n    def nav_version = \"2.4.1\"\n    implementation \"androidx.navigation:navigation-fragment-ktx:$nav_version\"\n    implementation \"androidx.navigation:navigation-ui-ktx:$nav_version\"\n\n    //viewpager2 indicatior\n    implementation 'io.github.vejei.viewpagerindicator:viewpagerindicator:1.0.0-alpha.1'\n\n    //lifecycle\n    implementation \"android.arch.lifecycle:extensions:1.1.0\"\n\n    //Firebase coroutines\n    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'\n\n    //stepView\n    implementation 'com.shuhart.stepview:stepview:1.5.1'\n\n    //Android Ktx\n    implementation \"androidx.fragment:fragment-ktx:1.4.1\"\n\n\n    //Dagger hilt\n    implementation \"com.google.dagger:hilt-android:2.38.1\"\n    kapt \"com.google.dagger:hilt-compiler:2.38.1\"\n\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle b/app/build.gradle
+--- a/app/build.gradle	
++++ b/app/build.gradle	
+@@ -5,6 +5,7 @@
+     id 'kotlin-parcelize'
+     id 'androidx.navigation.safeargs.kotlin'
+     id 'dagger.hilt.android.plugin'
++
+ }
+ 
+ 
+@@ -43,6 +44,7 @@
+ 
+ dependencies {
+ 
++    implementation 'androidx.room:room-common:2.5.2'
+     apply plugin :"kotlin-kapt"
+     implementation 'androidx.core:core-ktx:1.7.0'
+     implementation 'androidx.appcompat:appcompat:1.4.1'
+@@ -51,6 +53,8 @@
+     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
+     implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
++    kapt 'androidx.room:room-compiler:2.3.0'
++
+ 
+     testImplementation 'junit:junit:4.+'
+     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+@@ -116,4 +120,24 @@
+     kapt "com.google.dagger:hilt-compiler:2.38.1"
+ 
+ 
++    // Room components
++    implementation 'androidx.room:room-runtime:2.3.0'
++    annotationProcessor 'androidx.room:room-compiler:2.3.0'
++
++// optional - Kotlin Extensions and Coroutines support for Room
++    implementation 'androidx.room:room-ktx:2.3.0'
++
++// optional - RxJava2 support for Room
++    implementation 'androidx.room:room-rxjava2:2.3.0'
++
++// optional - RxJava3 support for Room
++    implementation 'androidx.room:room-rxjava3:2.3.0'
++
++// optional - Guava support for Room, including Optional and ListenableFuture
++    implementation 'androidx.room:room-guava:2.3.0'
++
++// Test helpers
++    testImplementation 'androidx.room:room-testing:2.3.0'
++
++
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/kleine/activities/LunchActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.kleine.activities\n\nimport android.content.Intent\nimport android.icu.lang.UCharacter.GraphemeClusterBreak.L\nimport android.os.Build.VERSION_CODES.M\nimport android.os.Build.VERSION_CODES.S\nimport androidx.appcompat.app.AppCompatActivity\nimport android.os.Bundle\nimport android.util.Log\nimport androidx.lifecycle.ViewModelProvider\nimport com.example.kleine.R\nimport com.example.kleine.firebaseDatabase.FirebaseDb\nimport com.example.kleine.model.Product\nimport com.example.kleine.util.Constants\nimport com.example.kleine.util.Constants.Companion.ACCESSORY_CATEGORY\nimport com.example.kleine.util.Constants.Companion.BLACK\nimport com.example.kleine.util.Constants.Companion.CHAIR_CATEGORY\nimport com.example.kleine.util.Constants.Companion.COLORS\nimport com.example.kleine.util.Constants.Companion.CUPBOARD_CATEGORY\nimport com.example.kleine.util.Constants.Companion.FURNITURE_CATEGORY\nimport com.example.kleine.util.Constants.Companion.GREEN\nimport com.example.kleine.util.Constants.Companion.IMAGES\nimport com.example.kleine.util.Constants.Companion.LARGE\nimport com.example.kleine.util.Constants.Companion.MEDIUM\nimport com.example.kleine.util.Constants.Companion.ORANGE\nimport com.example.kleine.util.Constants.Companion.ORDERS\nimport com.example.kleine.util.Constants.Companion.PRODUCTS_COLLECTION\nimport com.example.kleine.util.Constants.Companion.RED\nimport com.example.kleine.util.Constants.Companion.SIZES\nimport com.example.kleine.util.Constants.Companion.TABLES_CATEGORY\nimport com.example.kleine.util.Constants.Companion.XLARGE\nimport com.example.kleine.viewmodel.lunchapp.KleineViewModel\nimport com.example.kleine.viewmodel.lunchapp.ViewModelProviderFactory\nimport com.google.firebase.auth.FirebaseAuth\nimport com.google.firebase.firestore.FirebaseFirestore\nimport com.google.firebase.firestore.Query\nimport com.google.firebase.firestore.ktx.firestore\nimport com.google.firebase.ktx.Firebase\n\nclass LunchActivity : AppCompatActivity() {\n    val viewModel by lazy {\n        val firebaseDb = FirebaseDb()\n        val viewModelFactory = ViewModelProviderFactory(firebaseDb)\n        ViewModelProvider(this,viewModelFactory)[KleineViewModel::class.java]\n    }\n\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContentView(R.layout.activity_lunch)\n\n        supportActionBar?.hide()\n\n//        val random = Random.nextInt(from = 10000, until = 99999)\n\n//        saveNewProduct()\n    }\n\n    private fun saveNewProduct() {\n\n        val title = \"Bedside tables\"\n        val description = \"Your bedroom is a sanctuary where you unwind and create your own personal space.\" +\n                \" You deserve to have this space ornamented to help you stay organized, relaxed, and comfortable.\" +\n                \" Bedroom furniture creates utility and helps you be your functional best\"\n\n        val category = FURNITURE_CATEGORY\n        val price = \"300\"\n        val newPrice = \"229\"\n        val seller = \"ps mart\"\n        val orders = 3\n\n        val images = HashMap<String,Any>()\n        val imagesList = listOf(\n            \"https://wakefit-co.s3.ap-south-1.amazonaws.com/img/product-thumbnails/elara-double-drawer-bedside-table-lifestyle-rectangle-new.webp\",\n            \"https://wakefit-co.s3.ap-south-1.amazonaws.com/img/product-thumbnails/elara-double-drawer-bedside-table-lifestyle-rectangle-new.webp\",\n            \"https://wakefit-co.s3.ap-south-1.amazonaws.com/img/product-thumbnails/elara-double-drawer-bedside-table-lifestyle-rectangle-new.webp\"\n\n        )\n\n\n        val productPrice: Float? = price.toFloatOrNull()  // Renamed from price to productPrice\n        val productRate: Float? = null  // You might want to get the actual rate here\n\n\n        images.put(IMAGES,imagesList.toList())\n\n        val colors = HashMap<String,Any>()\n        val colorsList = listOf<String>(\n            \"#8D4E38\"\n        )\n\n        colors.put(COLORS, colorsList.toList())\n\n        val sizes = HashMap<String,Any>()\n        val sizeUnit = \"Space\"\n        val sizesList = listOf(\n            \"1*2\",\n        )\n\n        sizes.put(SIZES,sizesList.toList())\n\n        val product = Product(\n            id = 1208025,\n            productName = title,\n            description = description,\n            productCategory = category,\n            newPrice = newPrice,\n            productPrice = productPrice.toString(),\n            productRate = productRate,\n            seller = seller,\n            images = images,\n            colors = colors,\n            sizes = sizes,\n            orders = orders,\n            offerTime = null,\n            sizeUnit = sizeUnit\n        )\n        Firebase.firestore.collection(PRODUCTS_COLLECTION)\n            .document()\n            .set(product)\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/kleine/activities/LunchActivity.kt b/app/src/main/java/com/example/kleine/activities/LunchActivity.kt
+--- a/app/src/main/java/com/example/kleine/activities/LunchActivity.kt	
++++ b/app/src/main/java/com/example/kleine/activities/LunchActivity.kt	
+@@ -29,6 +29,7 @@
+ import com.example.kleine.util.Constants.Companion.SIZES
+ import com.example.kleine.util.Constants.Companion.TABLES_CATEGORY
+ import com.example.kleine.util.Constants.Companion.XLARGE
++import com.example.kleine.viewmodel.lunchapp.AppDatabase
+ import com.example.kleine.viewmodel.lunchapp.KleineViewModel
+ import com.example.kleine.viewmodel.lunchapp.ViewModelProviderFactory
+ import com.google.firebase.auth.FirebaseAuth
+@@ -38,21 +39,46 @@
+ import com.google.firebase.ktx.Firebase
+ 
+ class LunchActivity : AppCompatActivity() {
+-    val viewModel by lazy {
++
++    internal val viewModel: KleineViewModel by lazy {
++        // Initialize ViewModel with custom ViewModelProviderFactory
+         val firebaseDb = FirebaseDb()
+-        val viewModelFactory = ViewModelProviderFactory(firebaseDb)
+-        ViewModelProvider(this,viewModelFactory)[KleineViewModel::class.java]
++        val appDatabase = AppDatabase.getDatabase(applicationContext)
++        val viewModelFactory = ViewModelProviderFactory(firebaseDb,appDatabase)
++        ViewModelProvider(this, viewModelFactory).get(KleineViewModel::class.java)
+     }
++
++
++
+ 
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_lunch)
+ 
++        // Hide the action bar
+         supportActionBar?.hide()
+ 
+-//        val random = Random.nextInt(from = 10000, until = 99999)
++        // Initialize FirebaseDb and AppDatabase
++        val firebaseDbInstance = FirebaseDb()
++        val appDatabaseInstance = AppDatabase.getDatabase(this)  // Replace this with your actual initialization
++
++        // Initialize ViewModel with custom ViewModelProviderFactory
++        val viewModelFactory = ViewModelProviderFactory(firebaseDbInstance,appDatabaseInstance)
++
++        // Now you can use viewModel
++
++        FirebaseAuth.getInstance().addAuthStateListener {
++            val user = it.currentUser
++            if (user != null) {
++                // User is signed in
++                Log.d("AuthStateListener", "User is signed in with uid: ${user.uid}")
++            } else {
++                // User is signed out
++                Log.d("AuthStateListener", "User is NOT signed in.")
++            }
++        }
+ 
+-//        saveNewProduct()
++
+     }
+ 
+     private fun saveNewProduct() {
+@@ -119,4 +145,6 @@
+             .set(product)
+     }
+ 
++
++
+ }
+\ No newline at end of file

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/recycle_view_comment"
+    android:layout_marginBottom="@dimen/_8sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/firstCommentData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="8dp"
+
+        app:cardBackgroundColor="@color/card_background"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="0dp"
+        tools:ignore="MissingConstraints">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/userCommentCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="40dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/commentReply"
+                android:text="reply"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:textColor="@color/black"
+                android:background="@drawable/rounded_corner_no_reply"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/userComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:text="very nice math"
+                android:textColor="@color/primary_text"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/commentUserDate"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/commentReply"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/commentUserTextTitle"
+                android:layout_marginEnd="8dp"
+                android:text="Chin Zi Xin"
+                android:textColor="@color/primary_text"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/commentUserDate" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/commentUserDate"
+                android:text="2023-05-05 12:00:00"
+                android:textColor="@color/primary_text"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/userComment"
+                app:layout_constraintTop_toBottomOf="@+id/commentUserTextTitle"
+                app:layout_constraintBottom_toTopOf="@+id/imageView2" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_star"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/commentUserDate"
+                android:contentDescription="@string/string_rate">
+
+            </ImageView>
+
+
+            <TextView
+                android:id="@+id/userRating"
+                style="@style/style_text_black_norm"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_12sdp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:fontFamily="casual"
+                android:text="@{String.valueOf(productModel.rating)}"
+                android:textSize="@dimen/_10ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/commentUserDate"
+                app:layout_constraintLeft_toRightOf="@+id/imageView2"
+                tools:ignore="MissingConstraints"
+                tools:text="4.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/firstCommentImg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="@color/secondary_text"
+        app:cardCornerRadius="14dp"
+        app:layout_constraintBottom_toBottomOf="@+id/firstCommentData"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/firstCommentData">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:id="@+id/userCommentImage"
+            android:src="@drawable/ic_launcher_foreground" />
+
+
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

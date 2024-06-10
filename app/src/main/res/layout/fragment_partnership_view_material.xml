@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/materialData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/card_background"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/recycler_view_material_data" />
+
+
+
+
+        <!--        <LinearLayout-->
+<!--            android:background="@color/black"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="10dp">-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/image"-->
+<!--                android:layout_width="105dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:scaleType="centerInside"-->
+<!--                android:src="@drawable/addmath" />-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="10dp"-->
+<!--                android:orientation="vertical">-->
+
+
+<!--                <RelativeLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="40dp">-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/material_name"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Add Math"-->
+<!--                        android:textColor="@color/white"-->
+<!--                        android:textSize="30sp"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <androidx.appcompat.widget.AppCompatImageView-->
+<!--                        android:id="@+id/three_dots_image"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:layout_alignParentEnd="true"-->
+<!--                        android:src="@drawable/three_dots"-->
+<!--                        app:tint="@color/white" />-->
+
+<!--                </RelativeLayout>-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/material_desc"-->
+<!--                    android:text="advance mathematics"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textColor="@color/white" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/material_requirement"-->
+<!--                    android:text="Requirement: Math"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textColor="@color/white" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/material_mark"-->
+<!--                    android:text="Average Mark: 7/10"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textColor="@color/white" />-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content">-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:id="@+id/material_rating"-->
+<!--                        android:text="Rate:"-->
+<!--                        android:textSize="20sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:textColor="@color/white" />-->
+
+<!--                    <RatingBar-->
+<!--                        android:id="@+id/ratingBar"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:progressTint="@color/yellow"-->
+<!--                        android:progressBackgroundTint="@color/white"-->
+<!--                        android:numStars="5"-->
+<!--                        android:rating="4"-->
+<!--                        android:scaleX="0.6"-->
+<!--                        android:scaleY="0.6"-->
+<!--                        android:stepSize="1"-->
+<!--                        android:transformPivotX="0dp"-->
+<!--                        android:transformPivotY="0dp" />-->
+<!--                </LinearLayout>-->
+
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:gravity="end">-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/material_view_quiz"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="1dp"-->
+<!--                        android:layout_marginRight="10dp"-->
+<!--                        android:layout_marginBottom="6dp"-->
+<!--                        android:background="@drawable/rounded_background_view_data"-->
+<!--                        android:padding="3dp"-->
+<!--                        android:text="View Quiz"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textStyle="bold" />-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/material_view_data"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="1dp"-->
+<!--                        android:layout_marginRight="10dp"-->
+<!--                        android:layout_marginBottom="6dp"-->
+<!--                        android:background="@drawable/rounded_background_view_data"-->
+<!--                        android:padding="3dp"-->
+<!--                        android:text="View Data"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                </LinearLayout>-->
+
+
+
+<!--            </LinearLayout>-->
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:background="@color/black"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="10dp">-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/image2"-->
+<!--                android:layout_width="105dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:scaleType="centerInside"-->
+<!--                android:src="@drawable/math" />-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="10dp"-->
+<!--                android:orientation="vertical">-->
+
+
+<!--                <RelativeLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="40dp">-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/material_name2"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Math"-->
+<!--                        android:textColor="@color/white"-->
+<!--                        android:textSize="30sp"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <androidx.appcompat.widget.AppCompatImageView-->
+<!--                        android:id="@+id/three_dots_image2"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:layout_alignParentEnd="true"-->
+<!--                        android:src="@drawable/three_dots"-->
+<!--                        app:tint="@color/white" />-->
+
+<!--                </RelativeLayout>-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/material_desc2"-->
+<!--                    android:text="mathematics"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textColor="@color/white" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/material_requirement2"-->
+<!--                    android:text="Requirement: None"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textColor="@color/white" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/material_mark2"-->
+<!--                    android:text="Average Mark: 9/10"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textColor="@color/white" />-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content">-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:id="@+id/material_rating2"-->
+<!--                        android:text="Rate:"-->
+<!--                        android:textSize="20sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:textColor="@color/white" />-->
+
+<!--                    <RatingBar-->
+<!--                        android:id="@+id/ratingBar2"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:numStars="5"-->
+<!--                        android:rating="5"-->
+<!--                        android:scaleX="0.6"-->
+<!--                        android:scaleY="0.6"-->
+<!--                        android:stepSize="1"-->
+<!--                        android:progressTint="@color/yellow"-->
+<!--                        android:progressBackgroundTint="@color/white"-->
+<!--                        android:transformPivotX="0dp"-->
+<!--                        android:transformPivotY="0dp" />-->
+
+
+<!--                </LinearLayout>-->
+
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:gravity="end">-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/material_view_quiz2"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="1dp"-->
+<!--                        android:layout_marginRight="10dp"-->
+<!--                        android:layout_marginBottom="6dp"-->
+<!--                        android:background="@drawable/rounded_background_view_data"-->
+<!--                        android:padding="3dp"-->
+<!--                        android:text="View Quiz"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textStyle="bold" />-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/material_view_data2"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="1dp"-->
+<!--                        android:layout_marginRight="10dp"-->
+<!--                        android:layout_marginBottom="6dp"-->
+<!--                        android:background="@drawable/rounded_background_view_data"-->
+<!--                        android:padding="3dp"-->
+<!--                        android:text="View Data"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                </LinearLayout>-->
+
+<!--            </LinearLayout>-->
+<!--        </LinearLayout>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

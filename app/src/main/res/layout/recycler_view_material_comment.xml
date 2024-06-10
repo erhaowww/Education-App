@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/_8sdp"
+    android:background="@drawable/rounded_background"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/firstCommentData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="8dp"
+        app:cardBackgroundColor="@color/card_background"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/firstReplyCommentData">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linearLayoutCompat3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginBottom="@dimen/_16sdp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/_30sdp">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_star"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/rating"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                android:contentDescription="@string/string_rate">
+
+            </ImageView>
+
+
+            <TextView
+                android:id="@+id/rating"
+                style="@style/style_text_black_norm"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_12sdp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:fontFamily="casual"
+                android:text="@{String.valueOf(productModel.rating)}"
+                android:textSize="@dimen/_10ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/product"
+                app:layout_constraintStart_toStartOf="@+id/product"
+                app:layout_constraintTop_toBottomOf="@+id/product"
+                tools:ignore="MissingConstraints"
+                tools:text="4.0" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <TextView
+            android:id="@+id/userCommentDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2022-03-04 12:00:00"
+            android:textColor="@color/primary_text"
+            android:textSize="10sp"
+            android:gravity="end"
+            android:layout_marginRight="@dimen/_8sdp"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/userCommentCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="40dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/userComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="very nice math. good material.\nvery nice math. good material.\nvery nice math. good material."
+                android:textColor="@color/primary_text"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/commentUserTextTitle"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="138dp" />
+
+            <TextView
+                android:id="@+id/commentUserTextTitle"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="wrap_content"
+                android:text="Chin Zi Xin"
+                android:textColor="@color/primary_text"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/firstCommentImg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:cardBackgroundColor="@color/secondary_text"
+        app:cardCornerRadius="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="4dp"
+        app:layout_constraintTop_toTopOf="@+id/firstCommentData"
+        app:layout_constraintBottom_toBottomOf="@+id/firstCommentData"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/userImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_launcher_foreground" />
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/firstReplyCommentData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="@color/card_background"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/firstCommentData">
+
+        <TextView
+            android:id="@+id/replyCommentDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2022-03-04 12:00:00"
+            android:textColor="@color/primary_text"
+            android:textSize="10sp"
+            android:gravity="end"
+            android:layout_marginRight="@dimen/_8sdp"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/userReplyCommentCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="40dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/userReplyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="very nice math. good material.\nvery nice math. good material.\nvery nice math. good material."
+                android:textColor="@color/primary_text"
+                android:textSize="12sp"
+                app:layout_constraintLeft_toLeftOf="@+id/commentReplyUserTextTitle"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="wrap_content"
+                android:id="@+id/commentReplyUserTextTitle"
+                android:text="Chin Zi Xin"
+                android:textColor="@color/primary_text"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/firstReplyCommentImg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:cardBackgroundColor="@color/secondary_text"
+        app:cardCornerRadius="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="44dp"
+        app:layout_constraintTop_toTopOf="@+id/firstReplyCommentData"
+        app:layout_constraintBottom_toBottomOf="@+id/firstReplyCommentData"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/partnerImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_launcher_foreground" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/firstReplyCommentArrowImg"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="4dp"
+        app:layout_constraintTop_toTopOf="@+id/firstReplyCommentData"
+        app:layout_constraintBottom_toBottomOf="@+id/firstReplyCommentData"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:src="@drawable/reply"
+            app:tint="@color/white" />
+
+
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

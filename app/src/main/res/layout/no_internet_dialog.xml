@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_10sdp"
+    android:background="@color/blue"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="10dp"
+        app:cardBackgroundColor="@color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="500dp">
+
+            <ImageView
+                android:id="@+id/noInternet"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/no_internet" />
+
+            <ImageView
+                android:id="@+id/shadow"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/separateline" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/shadow">
+
+                <TextView
+                    android:id="@+id/noInternetText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="No Internet Connection"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/noInternetText"
+                    android:layout_above="@id/btn_ok"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="4dp"
+                    android:text="You are not connect to the Wi-Fi. Please make sure you open the Wi-Fi before you perform this action."
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_ok"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:paddingStart="80dp"
+                    android:paddingEnd="80dp"
+                    android:text="OK"
+                    android:textColor="#324460" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+        
+</RelativeLayout>

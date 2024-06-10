@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shopping_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/addMaterialFragment"
+        android:name="com.example.kleine.fragments.shopping.AddMaterialFragment"
+        android:label="Add Material">
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.kleine.fragments.shopping.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_homeFragment_to_addMaterialFragment"
+            app:destination="@id/addMaterialFragment" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:popUpTo="@id/homeFragment" />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="0" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_materialDetailsFragment"
+            app:destination="@id/materialDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/materialDetailsFragment"
+        android:name="com.example.kleine.fragments.shopping.MaterialPreviewFragment"
+        tools:layout="@layout/fragment_product_preview">
+
+        <action
+            android:id="@+id/action_materialDetailsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+
+        <argument
+            android:name="material"
+            app:argType="com.example.kleine.model.Material"
+            app:nullable="true" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.kleine.fragments.shopping.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search">
+
+        <action
+            android:id="@+id/action_searchFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+
+        <action
+            android:id="@+id/action_searchFragment_to_materialPreviewFragment"
+            app:destination="@+id/materialDetailsFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.kleine.fragments.shopping.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile">
+
+
+        <action
+            android:id="@+id/action_profileFragment_to_billingFragment"
+            app:destination="@id/billingFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_profileFragment_to_editUserInformation"
+            app:destination="@id/editUserInformation"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_profileFragment_to_allOrdersFragment"
+            app:destination="@id/allOrdersFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_profileFragment_to_languageFragment"
+            app:destination="@id/languageFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_profileFragment_to_viewPartnershipFragment"
+            app:destination="@id/viewPartnershipFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_profileFragment_to_helpFragment"
+            app:destination="@id/helpFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_profileFragment_to_joinPartnerFragment"
+            app:destination="@id/joinPartnerFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_profileFragment_to_adminDashboardFragment"
+            app:destination="@id/adminDashboardFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+        <action
+            android:id="@+id/action_profileFragment_to_passedQuizzesFragment"
+            app:destination="@id/passedQuizzesFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_rewardFragment"
+            app:destination="@id/rewardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.kleine.fragments.shopping.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart">
+
+        <action
+            android:id="@+id/action_cartFragment_to_billingFragment"
+            app:destination="@id/billingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/billingFragment"
+        android:name="com.example.kleine.fragments.shopping.BillingFragment"
+        android:label="fragment_billing"
+        tools:layout="@layout/fragment_billing">
+        <action
+            android:id="@+id/action_billingFragment_to_addressFragment"
+            app:destination="@id/addressFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <argument
+            android:name="clickFlag"
+            app:argType="string" />
+        <argument
+            android:name="price"
+            android:defaultValue="null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="products"
+            android:defaultValue="@null"
+            app:argType="com.example.kleine.model.CartProductsList"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_billingFragment_to_orderCompletion"
+            app:destination="@id/orderCompletion"
+            app:popUpTo="@id/billingFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_billingFragment_to_rewardFragment"
+            app:destination="@id/rewardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.example.kleine.fragments.shopping.AddressFragment"
+        android:label="fragment_address"
+        tools:layout="@layout/fragment_address">
+
+        <argument
+            android:name="address"
+            android:defaultValue="@null"
+            app:argType="com.example.kleine.model.Address"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderCompletion"
+        android:name="com.example.kleine.fragments.shopping.OrderCompletion"
+        android:label="fragment_order_completion"
+        tools:layout="@layout/fragment_order_completion">
+        <argument
+            android:name="order_completion_flag"
+            app:argType="string" />
+        <argument
+            android:name="orderNumber"
+            android:defaultValue="null"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_orderCompletion_to_orderDetails"
+            app:destination="@id/orderDetails" />
+        <argument
+            android:name="order"
+            app:argType="com.example.kleine.model.Order"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/editUserInformation"
+        android:name="com.example.kleine.fragments.settings.EditUserInformationFragment"
+        android:label="fragment_edit_user_information"
+        tools:layout="@layout/fragment_edit_user_information">
+        <argument
+            android:name="user"
+            app:argType="com.example.kleine.model.User" />
+    </fragment>
+    <fragment
+        android:id="@+id/allOrdersFragment"
+        android:name="com.example.kleine.fragments.settings.AllOrdersFragment"
+        android:label="fragment_all_orders"
+        tools:layout="@layout/fragment_all_orders" >
+
+        <action
+            android:id="@+id/action_allOrdersFragment_to_orderDetails"
+            app:destination="@id/orderDetails"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right">
+            <argument
+                android:name="documentId"
+                app:argType="string"
+                app:nullable="false" />
+        </action>
+
+        <action
+            android:id="@+id/action_allOrdersFragment_to_materialDetailsFragment"
+            app:destination="@id/materialDetailsFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetails"
+        android:name="com.example.kleine.fragments.settings.OrderDetails"
+        android:label="fragment_order_details"
+        tools:layout="@layout/fragment_order_details" >
+
+        <argument
+            android:name="material"
+            app:argType="com.example.kleine.model.Material" />
+
+        <argument
+            android:name="courseDocument"
+            app:argType="com.example.kleine.model.CourseDocument" />
+        <action
+            android:id="@+id/action_orderDetails_to_quizFragment"
+            app:destination="@id/quizFragment" >
+            <argument
+                android:name="materialDocId"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/action_orderDetails_to_profileFragment"
+            app:destination="@id/profileFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.example.kleine.fragments.settings.LanguageFragment"
+        android:label="fragment_language"
+        tools:layout="@layout/fragment_language" />
+    <fragment
+        android:id="@+id/viewPartnershipFragment"
+        android:name="com.example.kleine.fragments.partnership.ViewPartnershipFragment"
+        android:label="fragment_view_partnership"
+        tools:layout="@layout/fragment_view_partnership">
+        <action
+            android:id="@+id/action_viewPartnershipFragment_to_partnershipViewMaterialFragment"
+            app:destination="@id/partnershipViewMaterialFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_viewPartnershipFragment_to_updatePartnershipFragment"
+            app:destination="@id/updatePartnershipFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.example.kleine.fragments.settings.HelpFragment"
+        android:label="HelpFragment"
+        tools:layout="@layout/fragment_help"/>
+    <fragment
+        android:id="@+id/partnershipViewMaterialFragment"
+        android:name="com.example.kleine.fragments.partnership.PartnershipViewMaterialFragment"
+        android:label="fragment_partnership_view_material"
+        tools:layout="@layout/fragment_partnership_view_material" >
+        <action
+            android:id="@+id/action_partnershipViewMaterialFragment_to_partnershipViewMaterialDetailFragment"
+            app:destination="@id/partnershipViewMaterialDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right">
+            <argument
+                android:name="documentId"
+                app:argType="string"
+                app:nullable="false" />
+        </action>
+        <action
+            android:id="@+id/action_partnershipViewMaterialFragment_to_setsFragment"
+            app:destination="@id/setsFragment" />
+
+        <action
+            android:id="@+id/action_partnershipViewMaterialFragment_to_editMaterialFragment"
+            app:destination="@id/editMaterialFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/partnershipViewMaterialDetailFragment"
+        android:name="com.example.kleine.fragments.partnership.PartnershipViewMaterialDetailFragment"
+        android:label="fragment_partnership_view_material_detail"
+        tools:layout="@layout/fragment_partnership_view_material_detail" >
+        <action
+            android:id="@+id/action_partnershipViewMaterialDetailFragment_to_replyCommentFragment"
+            app:destination="@id/replyCommentFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="documentId"
+                app:argType="string"
+                app:nullable="false" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/replyCommentFragment"
+        android:name="com.example.kleine.fragments.partnership.ReplyCommentFragment"
+        android:label="fragment_reply_comment"
+        tools:layout="@layout/fragment_reply_comment" />
+    <fragment
+        android:id="@+id/joinPartnerFragment"
+        android:name="com.example.kleine.fragments.partnership.JoinPartnerFragment"
+        android:label="fragment_join__partner_"
+        tools:layout="@layout/fragment_join__partner_" />
+    <fragment
+        android:id="@+id/adminDashboardFragment"
+        android:name="com.example.kleine.fragments.admin.AdminDashboardFragment"
+        android:label="fragment_admin_dashboard"
+        tools:layout="@layout/fragment_admin_dashboard" >
+        <action
+            android:id="@+id/action_adminDashboardFragment_to_adminViewPartnershipFragment"
+            app:destination="@id/adminViewPartnershipFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+        <action
+            android:id="@+id/action_adminDashboardFragment_to_adminViewRewardFragment"
+            app:destination="@id/adminViewRewardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminViewPartnershipFragment"
+        android:name="com.example.kleine.fragments.admin.AdminViewPartnershipFragment"
+        android:label="fragment_admin_view_partnership"
+        tools:layout="@layout/fragment_admin_view_partnership" >
+        <action
+            android:id="@+id/action_adminViewPartnershipFragment_to_adminViewPartnershipRequestFragment"
+            app:destination="@id/adminViewPartnershipRequestFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/adminViewPartnershipRequestFragment"
+        android:name="com.example.kleine.fragments.admin.AdminViewPartnershipRequestFragment"
+        android:label="fragment_admin_view_partnership_request"
+        tools:layout="@layout/fragment_admin_view_partnership_request" />
+    <fragment
+        android:id="@+id/updatePartnershipFragment"
+        android:name="com.example.kleine.fragments.partnership.UpdatePartnershipFragment"
+        android:label="UpdatePartnershipFragment"
+        tools:layout="@layout/fragment_update_partnership"/>
+
+<!--    quiz-->
+    <fragment
+        android:id="@+id/setsFragment"
+        android:name="com.example.kleine.fragments.quiz.SetsFragment"
+        android:label="SetsFragment"
+        tools:layout="@layout/fragment_sets" >
+        <action
+            android:id="@+id/action_setsFragment_to_questionFragment"
+            app:destination="@id/questionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionFragment"
+        android:name="com.example.kleine.fragments.quiz.QuestionFragment"
+        android:label="QuestionFragment"
+        tools:layout="@layout/fragment_question" >
+        <action
+            android:id="@+id/action_questionFragment_to_addUpdateQuestionFragment"
+            app:destination="@id/addUpdateQuestionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editMaterialFragment"
+        android:name="com.example.kleine.fragments.partnership.EditMaterialFragment"
+        android:label="Edit Material"
+        tools:layout="@layout/edit_material">
+        <argument
+            android:name="materialId"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addUpdateQuestionFragment"
+        android:name="com.example.kleine.fragments.quiz.AddUpdateQuestionFragment"
+        android:label="AddUpdateQuestionFragment"
+        tools:layout="@layout/fragment_add_update_question" />
+    <fragment
+        android:id="@+id/quizFragment"
+        android:name="com.example.kleine.fragments.quiz.QuizFragment"
+        android:label="QuizFragment"
+        tools:layout="@layout/fragment_quiz" >
+        <action
+            android:id="@+id/action_quizFragment_to_playFragment"
+            app:destination="@id/playFragment" >
+            <argument
+                android:name="materialDocId"
+                app:argType="string"
+                app:nullable="false" />
+            <argument
+                android:name="randomSetId"
+                app:argType="string"
+                app:nullable="false" />
+        </action>
+        <action
+            android:id="@+id/action_quizFragment_to_orderDetails"
+            app:destination="@id/orderDetails" />
+    </fragment>
+    <fragment
+        android:id="@+id/playFragment"
+        android:name="com.example.kleine.fragments.quiz.PlayFragment"
+        android:label="PlayFragment"
+        tools:layout="@layout/fragment_play" >
+        <action
+            android:id="@+id/action_playFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
+        <action
+            android:id="@+id/action_playFragment_to_quizFragment"
+            app:destination="@id/quizFragment" />
+        <argument
+            android:name="materialDocId"
+            app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.example.kleine.fragments.quiz.ResultFragment"
+        android:label="ResultFragment"
+        tools:layout="@layout/fragment_result" >
+        <action
+            android:id="@+id/action_resultFragment_to_quizFragment"
+            app:destination="@id/quizFragment">
+            <argument
+                android:name="materialDocId"
+                app:argType="string"
+                app:nullable="true" />
+        </action>
+        <action
+            android:id="@+id/action_resultFragment_to_orderDetails"
+            app:destination="@id/orderDetails" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/passedQuizzesFragment"
+        android:name="com.example.kleine.fragments.quiz.PassedQuizzesFragment"
+        android:label="PassedQuizzesFragment"
+        tools:layout="@layout/fragment_passed_quizzes" />
+    <!--    end quiz-->
+
+<!--    reward-->
+    <fragment
+        android:id="@+id/adminViewRewardFragment"
+        android:name="com.example.kleine.fragments.admin.AdminViewRewardFragment"
+        android:label="AdminViewRewardFragment"
+        tools:layout="@layout/fragment_admin_view_reward">
+        <action
+            android:id="@+id/action_adminViewRewardFragment_to_adminAddRewardFragment"
+            app:destination="@id/adminAddRewardFragment" />
+        <action
+            android:id="@+id/action_adminViewRewardFragment_to_adminUpdateRewardFragment"
+            app:destination="@id/adminUpdateRewardFragment" >
+            <argument
+            android:name="rewardName"
+            app:argType="string" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/adminAddRewardFragment"
+        android:name="com.example.kleine.fragments.admin.AdminAddRewardFragment"
+        android:label="AdminAddRewardFragment"
+        tools:layout="@layout/fragment_admin_add_reward"/>
+    <fragment
+        android:id="@+id/adminUpdateRewardFragment"
+        android:name="com.example.kleine.fragments.admin.AdminUpdateRewardFragment"
+        android:label="AdminUpdateRewardFragment"
+        tools:layout="@layout/fragment_admin_update_reward"/>
+    <fragment
+        android:id="@+id/rewardFragment"
+        android:name="com.example.kleine.fragments.reward.RewardFragment"
+        android:label="RewardFragment"
+        tools:layout="@layout/fragment_reward">
+        <action
+            android:id="@+id/action_rewardFragment_to_billingFragment"
+            app:destination="@id/billingFragment" />
+        <action
+            android:id="@+id/action_rewardFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+<!--    end reward-->
+</navigation>

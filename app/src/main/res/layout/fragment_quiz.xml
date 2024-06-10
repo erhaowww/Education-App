@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <!-- Declare variables or imports here if needed -->
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primary_color" >
+
+        <TextView
+            android:id="@+id/material_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="35sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/chakrapetchbold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.25" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            app:layout_constraintTop_toBottomOf="@+id/material_name">
+
+            <Button
+                style="@style/Widget.Kleine.Button"
+                android:id="@+id/btn_play"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_btn"
+                android:textStyle="bold"
+                android:textColor="@color/primary_color"
+                android:fontFamily="@font/chakrapetchbold"
+                android:textSize="20sp"
+                android:padding="8dp"
+                android:onClick="main_btn"
+                android:text="Play" />
+
+            <Button
+                style="@style/Widget.Kleine.Button"
+                android:id="@+id/btn_exit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/background_btn"
+                android:textStyle="bold"
+                android:textColor="@color/primary_color"
+                android:fontFamily="@font/chakrapetchbold"
+                android:textSize="20sp"
+                android:onClick="main_btn"
+                android:padding="8dp"
+                android:text="Exit" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

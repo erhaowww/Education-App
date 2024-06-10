@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="comment_layout" type="id" />
+    <item name="quiz_layout" type="id" />
+    <item name="cardHeader" type="id" />
+    <item name="view_material" type="id" />
+    <item name="viewpager_home" type="id" />
+    <item name="quizData" type="id" />
+    <item name="totalComment" type="id" />
+</resources>
